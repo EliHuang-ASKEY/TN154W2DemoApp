@@ -1,0 +1,69 @@
+﻿<Page
+    x:Class="IOTCoreMasterApp.MainPage"
+    Name="_MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IOTCoreMasterApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:data="using:IOTCoreMasterApp.DataModel"
+    mc:Ignorable="d"   
+    NavigationCacheMode="Enabled">
+
+    <Page.DataContext>
+        <Binding
+            Source="{StaticResource TheViewModel}" />
+        <!-- DataContext= "{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"-->
+    </Page.DataContext>
+    
+    <Grid>
+        <ComboBox x:Name="ScrollAlignment" SelectedIndex="0" Width="100" Visibility="Collapsed">
+            <ComboBoxItem Content="Default">
+                <ComboBoxItem.Tag>
+                    <ScrollIntoViewAlignment>Default</ScrollIntoViewAlignment>
+                </ComboBoxItem.Tag>
+            </ComboBoxItem>
+            <ComboBoxItem Content="Leading">
+                <ComboBoxItem.Tag>
+                    <ScrollIntoViewAlignment>Leading</ScrollIntoViewAlignment>
+                </ComboBoxItem.Tag>
+            </ComboBoxItem>
+        </ComboBox>
+        <ListView Name="appListControl" 
+          ScrollViewer.HorizontalScrollMode="Enabled"
+          ScrollViewer.HorizontalScrollBarVisibility="Visible"
+          ScrollViewer.IsHorizontalRailEnabled="True"
+          ScrollViewer.VerticalScrollMode="Disabled"
+                  
+                  ItemsSource="{Binding appList}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,38">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <Grid Margin="4" Background="DarkRed"  Width="250" Height="250" Tapped="Grid_Tapped" >
+                        <Image Source="{Binding ImageSrc}" Width="150" Height="150" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" />
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Bottom" Margin="6,6,6,20" HorizontalAlignment="Center" FontSize="20"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <TextBlock Text="{Binding currentStatusText}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Visibility="Collapsed"/>
+        <Grid Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <TextBlock Name="Brightness"  Width="250"/>
+        </Grid>
+        <Grid Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Rectangle Width="100" Height="30" HorizontalAlignment="Left" Stroke="#FF9E9898" StrokeThickness="2" VerticalAlignment="Top" />
+            <Rectangle Name="batteryPercent" Width="{Binding batteryPercent}" Height="20" HorizontalAlignment="Left" StrokeThickness="0" VerticalAlignment="Center" Fill="#FF3DBB0D" Margin="3" />
+            <TextBlock Text="{Binding batteryStatus}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+        <!-- <maps:MapControl x:Name="myMap" MapServiceToken="sojiwiG3TtS50Mc5fWX5~_MwV4dgClD2lxKKILWScQA~AhKS0bNdcJhYEnb0NDiFva8nAbejhoNpkgQmnygjmcYkixhIj8tkH8RNVnifre2n" ZoomLevel="0"></maps:MapControl>
+        -->
+        <MediaPlayerElement  x:Name="mediaPlayerAudio" Visibility="Collapsed"/>
+        
+    </Grid>
+</Page>
+<!--ItemsSource="{Binding appList}"-->

@@ -1,0 +1,36 @@
+﻿<Page
+    x:Class="IOTCoreMasterApp.LocalApps.AppClock"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IOTCoreMasterApp.LocalApps"
+    xmlns:localc="using:IOTCoreMasterApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+
+    <Page.DataContext>
+        <Binding
+            Source="{StaticResource TheViewModel}" />
+        <!-- DataContext= "{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"-->
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <AppBarButton x:Name="appBarButton"   
+            HorizontalAlignment="Left"   
+            Icon="Back" Label=""   
+            VerticalAlignment="Top"   
+            Width="45" Height="44" Click="appBarButton_Click"   
+            />
+        <localc:Clock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20"></localc:Clock>
+        <TextBlock x:Name="timeString" Text="00:00:00" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" FontWeight="Bold" Foreground="#FFD8D820" Margin="0,0,0,10" />
+        <AppBarButton x:Name="appBarSettingButton"   
+            HorizontalAlignment="Right"   
+            Icon="Setting" Label=""   
+            VerticalAlignment="Bottom"   
+            Width="45" Height="44" Click="appBarSettingButton_Click" 
+                      Visibility="Collapsed"
+            />
+    </Grid>
+</Page>

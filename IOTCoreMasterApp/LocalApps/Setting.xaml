@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="IOTCoreMasterApp.LocalApps.Setting"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IOTCoreMasterApp.LocalApps"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="320" Height="320">
+            <StackPanel Height="60" >
+                <TextBlock  Name="mes" Text="995" Height="50" Foreground="Snow" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,25,0,0" FontWeight="Bold" Visibility="Collapsed"/>
+
+                <AppBarButton x:Name="appBarButton"
+                          Grid.Column="3"
+                HorizontalAlignment="Right"   
+                Icon="Forward" Label=""   
+                VerticalAlignment="Top"   
+                Width="50" Height="44"  Click="appBarButton_Click" />
+            </StackPanel>
+            <Border Height="3" Width="300" Background="White" />
+        <StackPanel Orientation="Horizontal" Height="70" Width="280" Margin="0,5,0,5" PointerPressed="WifiPanel_PointerPressed">
+            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="40" Width="40" Text="&#xE701;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold" Margin="0,0,0,10" />
+            <TextBlock  Text="Wi-Fi" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" />
+            <ToggleSwitch x:Name="m_WifiRadio" Toggled="WifiRadio_Toggled" />
+        </StackPanel>
+            <Border Height="3" Width="300" Background="White" />
+        <StackPanel x:Name="SPbluetooth" Orientation="Horizontal" Height="70" Width="280" Margin="-5,5,0,5" PointerPressed="BluetoothPanel_PointerPressed" Visibility="Visible">
+            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="45"  Width="45" Text="&#xE702;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold"/>
+            <TextBlock  Text="Bluetooth" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold"/>
+            <ToggleSwitch x:Name="m_BluetoothRadio" Toggled="Bluetooth_Toggled"/>
+        </StackPanel>
+        
+        <Border Height="3" Width="300" Background="White" />
+            <StackPanel x:Name="SPsoundeffect" Orientation="Horizontal" Height="70" Width="280" Margin="-5,5,0,5" PointerPressed="BluetoothPanel_PointerPressed" Visibility="Visible">
+                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="45"  Width="45" Text="&#xE767;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold"/>
+                <TextBlock  Text="SoundEffect" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold"/>
+                <ToggleSwitch x:Name="m_soundeffect" Toggled="SoundEffect_Toggled"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

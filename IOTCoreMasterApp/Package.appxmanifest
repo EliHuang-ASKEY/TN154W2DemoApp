@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10" IgnorableNamespaces="uap mp iot rescap">
+  <Identity Name="IOTDefaultAPPTest" Publisher="CN=Eli" Version="1.1.41.0" />
+  <mp:PhoneIdentity PhoneProductId="14ae752b-02a9-44e5-af1e-ae1dae224d9b" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Properties>
+    <DisplayName>IOTCoreDefaultApplication</DisplayName>
+    <PublisherDisplayName>IOT</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+  </Dependencies>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="IOTCoreDefaultApp.App">
+      <uap:VisualElements DisplayName="IOTCoreDefaultApplication" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="IOTCoreDefaultApp" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+        </uap:DefaultTile>
+        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+      </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="myapplication" />
+        </uap:Extension>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="mediafiles">
+            <uap:SupportedFileTypes>
+              <uap:FileType>.qcp</uap:FileType>
+              <uap:FileType>.wav</uap:FileType>
+              <uap:FileType>.mp3</uap:FileType>
+              <uap:FileType>.m4r</uap:FileType>
+              <uap:FileType>.m4a</uap:FileType>
+              <uap:FileType>.aac</uap:FileType>
+              <uap:FileType>.amr</uap:FileType>
+              <uap:FileType>.wma</uap:FileType>
+              <uap:FileType>.3g2</uap:FileType>
+              <uap:FileType>.3gp</uap:FileType>
+              <uap:FileType>.mp4</uap:FileType>
+              <uap:FileType>.wm</uap:FileType>
+              <uap:FileType>.asf</uap:FileType>
+              <uap:FileType>.3gpp</uap:FileType>
+              <uap:FileType>.3gp2</uap:FileType>
+              <uap:FileType>.mpa</uap:FileType>
+              <uap:FileType>.adt</uap:FileType>
+              <uap:FileType>.adts</uap:FileType>
+              <uap:FileType>.pya</uap:FileType>
+              <uap:FileType>.m4v</uap:FileType>
+              <uap:FileType>.wmv</uap:FileType>
+              <uap:FileType>.mov</uap:FileType>
+              <uap:FileType>.mp4v</uap:FileType>
+              <uap:FileType>.avi</uap:FileType>
+              <uap:FileType>.pyv</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <Capability Name="internetClientServer" />
+    <Capability Name="privateNetworkClientServer" />
+    <uap:Capability Name="documentsLibrary" />
+    <uap:Capability Name="picturesLibrary" />
+    <uap:Capability Name="removableStorage" />
+    <uap:Capability Name="videosLibrary" />
+    <uap:Capability Name="musicLibrary" />
+    <iot:Capability Name="systemManagement" />
+    <iot:Capability Name="lowLevelDevices" />
+    <rescap:Capability Name="packageQuery" />
+    <DeviceCapability Name="proximity" />
+    <DeviceCapability Name="webcam" />
+    <DeviceCapability Name="bluetooth" />
+    <DeviceCapability Name="location" />
+    <DeviceCapability Name="microphone" />
+    <DeviceCapability Name="radios" />
+    <DeviceCapability Name="bluetooth.rfcomm" />
+    <DeviceCapability Name="wifiControl" />
+  </Capabilities>
+</Package>

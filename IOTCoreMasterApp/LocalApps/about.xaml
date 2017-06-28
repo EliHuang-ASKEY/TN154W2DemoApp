@@ -1,0 +1,106 @@
+﻿<Page
+    x:Class="IOTCoreMasterApp.LocalApps.about"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IOTCoreMasterApp.LocalApps"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Foreground="{x:Null}">
+
+    <Grid Background="#FF000000" Width="320" Height="320">
+        <StackPanel Orientation="Horizontal">
+
+
+            <ListView Width="320">
+                <StackPanel Orientation="Vertical" Width="310" IsTapEnabled="False">
+                    <Border Height="3" Width="300" Background="DimGray" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_SN" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="NoWrap" Height="auto"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_APPVersion" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="NoWrap" Height="auto"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_OperatingSystem" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Height="32" >
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_SystemVersion" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+                    </StackPanel>
+
+
+
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" Margin="0,10" Foreground="Snow" >
+                        </TextBlock>
+                        <TextBlock x:Name="m_BootLoaderVersion" Text="" FontSize="24" Foreground="Snow" Width="270" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" Margin="0,10" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_FirmwareRevision" Text="" FontSize="24" Foreground="Snow" Width="270" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_HardwareRevision" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_Manufacturer" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_ManufacturerModelName" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" Margin="0,10" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_OEMImageVersion" Text="" FontSize="24" Foreground="Snow" Width="270" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+                    </StackPanel>
+                    <!--
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                        </TextBlock>
+                        <TextBlock x:Name="m_OEMBuildVersion" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+                    </StackPanel>
+                    -->
+                    <!--
+                <StackPanel Orientation="Horizontal" Visibility="Collapsed">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                    </TextBlock>
+                    <TextBlock x:Name="m_SystemHardwareVersion" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Visibility="Collapsed">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="10" Text="&#xE91F;" VerticalAlignment="Center" Foreground="Snow">
+                    </TextBlock>
+                    <TextBlock x:Name="m_SystemFirmwareVersion" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" />
+                </StackPanel>
+                   -->
+                    <Border Height="3" Width="300" Background="DimGray" />
+                </StackPanel>
+            </ListView>
+
+
+        </StackPanel>
+        <AppBarButton x:Name="appBarButton"
+                HorizontalAlignment="Right"   
+                Icon="Forward" Label=""   
+                VerticalAlignment="Top"   
+                Width="50" Height="44"  Click="appBarButton_Click" />
+
+    </Grid>
+</Page>

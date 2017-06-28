@@ -1,0 +1,42 @@
+﻿<Page
+    x:Class="IOTCoreMasterApp.LocalApps.WifiScanPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IOTCoreMasterApp.LocalApps"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Background="black" Width="320" Height="320" >
+        <Border Height="1" Width="300" Background="#FF8D7A7A" Margin="0,15,0,5" />
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+            <Popup x:Name="m_Popup" VerticalOffset="75" HorizontalOffset="75">
+                <ProgressRing Width="150" Height="150"  IsActive="True" Foreground="#FF18D654"  Margin="0,10,0,0" />
+            </Popup>
+            <TextBlock Text="Wi-Fi" Width="100" Height="50" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="26.667" Margin="35,0,0,0" Foreground="White" />
+            <Button x:Name="m_ScanButton" Content="Scan" Width="75" Background="#33FFFFFF" Foreground="#FFF9F6F6" HorizontalAlignment="Center" Click="ScanButton_Click"/>
+            <Button x:Name="m_BackButton" Content="Back" Width="75" Background="#33FFFFFF" Foreground="#FFF9F6F6" HorizontalAlignment="Center" Click="BackButton_Click"  Margin="10,0,0,0"/>
+        </StackPanel>
+        <Border Height="1" Width="300" Background="#FF8D7A7A" Margin="0,5,0,5" />
+        <ListView x:Name="m_WifiApCollectionListView"                   
+                  Height="200" 
+                  SelectionChanged="WifiApCollectionList_SelectionChanged"
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
+                  ScrollViewer.VerticalScrollBarVisibility="Hidden" 
+                  >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel PointerPressed="StackPanel_PointerPressed">
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Width="30" Height="30" Margin="10,0,0,0" Source="{Binding WiFiImage}"/>
+                            <TextBlock FontSize="24" Foreground="#FF0096F0" Margin="10,0,0,0" Width="240" Text="{Binding Ssid}"/>
+                        </StackPanel>
+                        <TextBlock FontSize="16" Foreground="#FF0096F0" Margin="60,0,0,0" Width="230" Text="{Binding Rssi}"/>
+                        <TextBlock FontSize="16" Foreground="#FF0096F0" Margin="60,0,0,0" Width="230" Text="{Binding AuthenticationType}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Border Height="1" Width="300" Background="#FF8D7A7A" Margin="0,5,0,5" />
+    </StackPanel>
+</Page>
