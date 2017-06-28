@@ -38,8 +38,11 @@ TN154W2 defaule APP source code For Visual Studio 2015
     
 ### Vibrator
     IOTCoreMasterApp\LocalApps\Vibrator.xaml
-    Vibrator,call hwntest.exe.please reference 
-*[External Process Launcher](https://developer.microsoft.com/en-us/windows/iot/samples/externalprocesslauncher)
+    Vibration Device Class
+    Namespace:Windows.Devices.Haptics
+    Windows 10 requirements
+    Device family	Windows 10 Creators Update (introduced v10.0.15063.0)
+*[Link](https://docs.microsoft.com/en-us/uwp/api/windows.devices.haptics.vibrationdevice)
   
 ### NFC
     IOTCoreMasterApp\LocalApps\NFCTest.xaml
@@ -51,9 +54,11 @@ TN154W2 defaule APP source code For Visual Studio 2015
     
 ### Brightness
     IOTCoreMasterApp\LocalApps\DeviceContrl.xaml
-    Set Brightness via IOCTL(Brightness.exe).Save the Britheness value to "BrightnessLevel.txt"
-    please reference 
-*[External Process Launcher](https://developer.microsoft.com/en-us/windows/iot/samples/externalprocesslauncher)
+    Brightness Override Class
+    Namespace:Windows.Graphics.Display
+    Windows 10 requirements
+    Device family	Windows 10 Creators Update (introduced v10.0.15063.0)
+*[Link](https://docs.microsoft.com/en-us/uwp/api/windows.graphics.display.brightnessoverride)
     
 ### Message
     IOTCoreMasterApp\LocalApps\ShowMessage.xaml
