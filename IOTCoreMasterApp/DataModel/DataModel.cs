@@ -380,6 +380,7 @@ namespace IOTCoreMasterApp.DataModel
                         item.AppEntry = entry;
                         IRandomAccessStreamWithContentType logostream = await logo.OpenReadAsync();
                         await item.ImageSrc.SetSourceAsync(logostream);
+                        
                         if (item.Name != "Work or school account" &
                             item.Name != "Purchase Dialog" &
                             item.Name != "ZWaveHeadlessAdapterApp" &
@@ -398,8 +399,9 @@ namespace IOTCoreMasterApp.DataModel
                             item.Name != "Connect" &
                             (_AS7000 | item.Name != "AS7000HRM"))    
                         {
+                        
                             appList.Add(item);
-                        }
+                       }
                     }
                     catch {
                     }
@@ -416,6 +418,8 @@ namespace IOTCoreMasterApp.DataModel
             //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
             litem.Name = "Information";
             appList.Add(litem);
+
+
 
 
             //Add local App 

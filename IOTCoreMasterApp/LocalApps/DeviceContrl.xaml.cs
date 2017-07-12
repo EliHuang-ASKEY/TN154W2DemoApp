@@ -132,7 +132,7 @@ namespace IOTCoreMasterApp.LocalApps
 
                 //bo.SetBrightnessScenario(DisplayBrightnessScenario.FullBrightness, DisplayBrightnessOverrideOptions.None);
                 bo.SetBrightnessLevel(value, DisplayBrightnessOverrideOptions.None);
-
+                
                 //Request to start the overriding process
 
             }

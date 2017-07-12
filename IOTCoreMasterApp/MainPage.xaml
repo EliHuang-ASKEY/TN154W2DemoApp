@@ -62,7 +62,7 @@
         </Grid>
         <!-- <maps:MapControl x:Name="myMap" MapServiceToken="sojiwiG3TtS50Mc5fWX5~_MwV4dgClD2lxKKILWScQA~AhKS0bNdcJhYEnb0NDiFva8nAbejhoNpkgQmnygjmcYkixhIj8tkH8RNVnifre2n" ZoomLevel="0"></maps:MapControl>
         -->
-        <MediaPlayerElement  x:Name="mediaPlayerAudio" Visibility="Collapsed"/>
+        <MediaPlayerElement  x:Name="mediaPlayerAudio"  Visibility="Collapsed"  />
         
     </Grid>
 </Page>

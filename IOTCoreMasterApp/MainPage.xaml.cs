@@ -49,14 +49,15 @@ namespace IOTCoreMasterApp
         private GpioPin flashPin112;
         private GpioOpenStatus openStatus;
 
+        private Windows.UI.Core.CoreDispatcher messageDispatcher = Window.Current.CoreWindow.Dispatcher;
         public MainPage()
         {
             this.InitializeComponent();
             App.ViewModel.LoadAppList();
             Debug.WriteLine("Main Test1= " + this.wavPlayer);
             InitGPIO112();
-            //Windows.System.Power.PowerManager.RemainingChargePercentChanged += PowerManager_RemainingChargePercentChanged;
-            batteryPercent.SizeChanged += PowerManager_RemainingChargePercentChanged;
+            Windows.System.Power.PowerManager.RemainingChargePercentChanged += PowerManager_RemainingChargePercentChanged;
+            //batteryPercent.SizeChanged += PowerManager_RemainingChargePercentChanged;
             
         }
         private void PowerManager_RemainingChargePercentChanged(object sender, object e)
@@ -306,6 +307,7 @@ namespace IOTCoreMasterApp
                     else
                         this.Frame.Navigate(typeof(FlashLight), null);
                 }
+
                 else
                 {
                     await item.AppEntry.LaunchAsync();
@@ -340,17 +342,28 @@ namespace IOTCoreMasterApp
 
         }
 
-        private void SoundEffect()
+        private async void SoundEffect()
         {
-            
 
-                this.mediaPlayerAudio.SetMediaPlayer(_mediaPlayer);
-                this.mediaPlayerAudio.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Danzon_De_Pasion_Sting.mp3"));
-                this._mediaPlayer = mediaPlayerAudio.MediaPlayer;
-                this._mediaPlayer.Volume = 1f;
-                this._mediaPlayer.Play();
-                
+
             
+            this.mediaPlayerAudio.SetMediaPlayer(_mediaPlayer);
+            this.mediaPlayerAudio.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Danzon_De_Pasion_Sting.mp3"));
+            this._mediaPlayer = mediaPlayerAudio.MediaPlayer;
+            this._mediaPlayer.Volume = 1f;
+            
+            
+            
+           
+
+            await messageDispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
+           () =>
+
+           {
+               this._mediaPlayer.Play();
+           });
+
+
         }
 
 
