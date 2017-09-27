@@ -25,6 +25,7 @@ using System.Diagnostics;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Media.Core;
+using IOTCoreMasterApp.Controls;
 
 
 
@@ -55,10 +56,13 @@ namespace IOTCoreMasterApp
             this.InitializeComponent();
             App.ViewModel.LoadAppList();
             Debug.WriteLine("Main Test1= " + this.wavPlayer);
-            InitGPIO112();
+            //InitGPIO112();
             Windows.System.Power.PowerManager.RemainingChargePercentChanged += PowerManager_RemainingChargePercentChanged;
+            Windows.System.Power.PowerManager.BatteryStatusChanged += PowerManager_BatteryStatusChanged;
             //batteryPercent.SizeChanged += PowerManager_RemainingChargePercentChanged;
-            
+            show_charging_png();
+
+
         }
         private void PowerManager_RemainingChargePercentChanged(object sender, object e)
         {
@@ -71,6 +75,41 @@ namespace IOTCoreMasterApp
             //if (Windows.System.Power.PowerManager.RemainingChargePercent < 5)
             //ShutdownManager.BeginShutdown(ShutdownKind.Shutdown, TimeSpan.FromSeconds(0.5));
 
+        }
+
+        private async void show_charging_png()
+        {
+            string BatteryStstus = Windows.System.Power.PowerManager.BatteryStatus.ToString();
+
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+
+                try
+                {
+                    if (BatteryStstus == "Charging")
+                    {
+                        Debug.WriteLine("Charging!!");
+                        ChargingPng.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Discharging!!");
+                        ChargingPng.Visibility = Visibility.Collapsed;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error:" + ex.ToString());
+                }
+
+            });
+
+        }
+
+        private void PowerManager_BatteryStatusChanged(object sender, object e)
+        {         
+            show_charging_png();
         }
 
 
@@ -302,12 +341,11 @@ namespace IOTCoreMasterApp
                 }
                 else if (item.PackageFullName.Contains("Flashlight"))
                 {
-                    if(openStatus ==0)
-                        this.Frame.Navigate(typeof(FlashLight), flashPin112);
-                    else
+                    //if(openStatus ==0)
+                        //this.Frame.Navigate(typeof(FlashLight), flashPin112);
+                    //else
                         this.Frame.Navigate(typeof(FlashLight), null);
                 }
-
                 else
                 {
                     await item.AppEntry.LaunchAsync();

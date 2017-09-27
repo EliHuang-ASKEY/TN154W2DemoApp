@@ -9,6 +9,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Haptics;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Navigation;
+using System.Diagnostics;
 // 空白頁項目範本已記錄在 http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace IOTCoreMasterApp.LocalApps
@@ -22,13 +24,25 @@ namespace IOTCoreMasterApp.LocalApps
         VibrationDevice VibrationDevice;
         SimpleHapticsControllerFeedback BuzzFeedback;
 
-        private int TimeMillis = 10000;
+        private int TimeMillis = 3000;
 
         private bool checkedAlready = false;
 
         public Vibrator()
         {
             this.InitializeComponent();
+        }
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            Debug.WriteLine("Vibrator:Start ");
+            if (VibrationDevice == null)
+            {
+                Debug.WriteLine("VibratorEnable1 = null then GetVbrationDevice()");
+                await GetVbrationDevice();
+            }
+
+            
+
         }
 
         private async Task GetVbrationDevice()
@@ -57,6 +71,7 @@ namespace IOTCoreMasterApp.LocalApps
         {
             if (VibrationDevice != null)
             {
+                Debug.WriteLine("VibratorEnable2 != null ");
                 VibrationDevice.SimpleHapticsController.SendHapticFeedbackForDuration(BuzzFeedback, 1, TimeSpan.FromMilliseconds(TimeMillis));
             }
             else

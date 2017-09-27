@@ -19,6 +19,7 @@ using Windows.System.Profile;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using System.Diagnostics;
+using Windows.Graphics.Display;
 
 
 // 空白頁項目範本已記錄在 http://go.microsoft.com/fwlink/?LinkId=234238
@@ -33,18 +34,18 @@ namespace IOTCoreMasterApp.LocalApps
 
         private App.RadioCtl m_RaidoController = new App.RadioCtl();
         private bool SoundEffectState = false;
-       
+
+        private BrightnessOverride bo;
 
 
         public Setting()
         {
             this.InitializeComponent();
-
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            
+            PopupFailMessage.IsOpen = false;
 
             checkOSVersion();
             checkSoundEffectState();
@@ -202,10 +203,17 @@ namespace IOTCoreMasterApp.LocalApps
 
         private async void UpdateWifiRadioStatus()
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            try
             {
-                m_WifiRadio.IsOn = (m_RaidoController.Wifi.State == RadioState.On);
-            });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    m_WifiRadio.IsOn = (m_RaidoController.Wifi.State == RadioState.On);
+                });
+            }
+            catch (Exception ex){
+                PopupFailMessage.IsOpen = true;
+                Message.Text += ex.ToString();
+            }
         }
         private void WifiRadio_StateChanged(Radio sender, object args)
         {
@@ -213,10 +221,18 @@ namespace IOTCoreMasterApp.LocalApps
         }
         private async void UpdateBluetoothRadioStatus()
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            try
             {
-                m_BluetoothRadio.IsOn = (m_RaidoController.Bluetooth.State == RadioState.On);
-            });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    m_BluetoothRadio.IsOn = (m_RaidoController.Bluetooth.State == RadioState.On);
+                });
+            }
+            catch (Exception ex)
+            {
+                PopupFailMessage.IsOpen = true;
+                Message.Text += ex.ToString();
+            }
         }
         private void BluetoothRadio_StateChanged(Radio sender, object args)
         {
@@ -253,54 +269,71 @@ namespace IOTCoreMasterApp.LocalApps
         }
         private async void Bluetooth_Toggled(object sender, RoutedEventArgs e)
         {
-            if (this.m_BluetoothRadio.IsOn)
+            
+            try
             {
-                if (this.m_RaidoController.Bluetooth.State == RadioState.On)
+                if (this.m_BluetoothRadio.IsOn)
                 {
-
+                    if (this.m_RaidoController.Bluetooth.State == RadioState.On)
+                    {
+                            
+                    }
+                    else
+                    {
+                        await this.m_RaidoController.Bluetooth.SetStateAsync(RadioState.On);
+                    }
                 }
                 else
                 {
-                    await this.m_RaidoController.Bluetooth.SetStateAsync(RadioState.On);
+                    if (this.m_RaidoController.Bluetooth.State == RadioState.Off)
+                    {
+
+                    }
+                    else
+                    {   
+                        await this.m_RaidoController.Bluetooth.SetStateAsync(RadioState.Off);
+                    }
                 }
             }
-            else
+            catch(Exception ex)
             {
-                if (this.m_RaidoController.Bluetooth.State == RadioState.Off)
-                {
-
-                }
-                else
-                {
-                    await this.m_RaidoController.Bluetooth.SetStateAsync(RadioState.Off);
-                }
+                PopupFailMessage.IsOpen = true;
+                Message.Text = ex.ToString();
             }
         }
         private async void WifiRadio_Toggled(object sender, RoutedEventArgs e)
         {
-            if (this.m_WifiRadio.IsOn)
-            {
-                if (this.m_RaidoController.Wifi.State == RadioState.On)
+            try
+            { 
+                if (this.m_WifiRadio.IsOn)
                 {
+                    if (this.m_RaidoController.Wifi.State == RadioState.On)
+                    {
 
+                    }
+                    else
+                    {
+                     await this.m_RaidoController.Wifi.SetStateAsync(RadioState.On);
+                    }
                 }
                 else
                 {
-                    await this.m_RaidoController.Wifi.SetStateAsync(RadioState.On);
-                }
-            }
-            else
-            {
-                if (this.m_RaidoController.Wifi.State == RadioState.Off)
-                {
+                    if (this.m_RaidoController.Wifi.State == RadioState.Off)
+                    {
 
-                }
-                else
-                {
-                    await this.m_RaidoController.Wifi.SetStateAsync(RadioState.Off);
+                    }
+                    else
+                    {
+                        await this.m_RaidoController.Wifi.SetStateAsync(RadioState.Off);
+                    }
                 }
             }
-        }
+            catch(Exception ex)
+            {
+                PopupFailMessage.IsOpen = true;
+                Message.Text = ex.ToString();
+            }
+}
 
         private void checkOSVersion()
         {
@@ -409,5 +442,84 @@ namespace IOTCoreMasterApp.LocalApps
             UpdateSoundEffectStatus();
 
         }
+
+        private void SPTap(object sender, TappedRoutedEventArgs e)
+        {
+            PopupFailMessage.IsOpen = false;
+        }
+
+        private void ResetSPTap(object sender, TappedRoutedEventArgs e)
+        {
+            PopupResetMessage.IsOpen = false;
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+                //popup resetting message
+                PopupResetMessage.IsOpen = true;
+
+
+                //set BT and Wifi switch to off
+                if (m_WifiRadio.IsOn || m_BluetoothRadio.IsOn)
+                {
+                    m_WifiRadio.IsOn = false;
+                    m_BluetoothRadio.IsOn = false;
+                }
+
+
+                //set the Brightness to Max
+                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Graphics.Display.BrightnessOverride"))
+                {
+
+                    bo = BrightnessOverride.GetDefaultForSystem();
+                    bo.StartOverride();
+                    double value = 1.0;//1.0=>Brightness=100,0.8=>>Brightness=80
+                    bo.SetBrightnessLevel(value, DisplayBrightnessOverrideOptions.None);
+                    await Task.Delay(1000);
+                    bo.StopOverride();
+                    await BrightnessOverride.SaveForSystemAsync(bo);
+                }
+
+
+                //delete all files in Video floder
+                var Videofiles = await KnownFolders.VideosLibrary.GetFilesAsync();
+
+                foreach (var file in Videofiles)
+                {
+                    await file.DeleteAsync(StorageDeleteOption.Default);
+                }
+
+
+                //delete all files in Picture floder
+                var Picturefiles = await KnownFolders.PicturesLibrary.GetFilesAsync();
+
+                foreach (var file in Picturefiles)
+                {
+                    await file.DeleteAsync(StorageDeleteOption.Default);
+                }
+
+
+                //delete all files in Music floder
+                var Musicfiles = await KnownFolders.MusicLibrary.GetFilesAsync();
+
+                foreach (var file in Musicfiles)
+                {
+                    await file.DeleteAsync(StorageDeleteOption.Default);
+                }
+
+                //close resetting message
+                PopupFailMessage.IsOpen = false;
+
+                await Task.Delay(2000);
+
+                //go back to mainpage when reset finished
+                if (this.Frame.CanGoBack)
+                {
+                    this.Frame.GoBack();
+                }
+
+
+        }
+            
     }
 }

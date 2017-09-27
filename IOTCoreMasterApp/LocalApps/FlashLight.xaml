@@ -9,8 +9,8 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
         <StackPanel Orientation="Vertical" >
-            <StackPanel Orientation="Horizontal" Height="80">
-                <TextBlock x:Name="InputTextBlock" TextWrapping="Wrap"   HorizontalAlignment="Left"  Width="270" FontSize="40"/>
+            <StackPanel Orientation="Horizontal" Height="50">
+                <TextBlock x:Name="InputTextBlock" TextWrapping="Wrap" Text="FlashLed"  HorizontalAlignment="Left"  Width="270" FontSize="40"/>
                 <AppBarButton x:Name="appBarButton"
                           Grid.Column="3"
                 HorizontalAlignment="Right"   
@@ -19,8 +19,9 @@
                 Width="50" Height="44"  Click="appBarButton_Click" />
             </StackPanel>
 
-            <StackPanel Height="120" Orientation="Horizontal">
-                <ToggleSwitch x:Name="toggleSwitch_FLASH112" Header="FlashLight" HorizontalAlignment="Center" Margin="70,0,0,0" VerticalAlignment="Center" Toggled="toggleSwitch_FLASH112_Toggled" FontSize="40" OffContent="OFF" OnContent="ON"  />
+            <StackPanel Height="180" Orientation="Vertical">
+                
+                <ToggleSwitch x:Name="toggleSwitch_FLASH112"   HorizontalAlignment="Center"  VerticalAlignment="Center" Toggled="toggleSwitch_FLASH112_Toggled" FontSize="100" OffContent="OFF" OnContent="ON"  HorizontalContentAlignment="Center" Padding="0" FontWeight="Thin" CharacterSpacing="-1" BorderThickness="0" RequestedTheme="Dark" TabNavigation="Local"    />
             </StackPanel>
             <ScrollViewer Grid.Row="5" Margin="12,10,12,0" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <TextBox
@@ -28,6 +29,6 @@
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
             </ScrollViewer>
         </StackPanel>
-        
+
     </Grid>
 </Page>

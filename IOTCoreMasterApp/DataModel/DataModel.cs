@@ -408,6 +408,8 @@ namespace IOTCoreMasterApp.DataModel
                 }
             }
 
+           
+
             litem = new AppListItem();
             litem.PackageFullName = "local:About";
             //StorageFile file;

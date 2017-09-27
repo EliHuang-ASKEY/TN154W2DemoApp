@@ -6,9 +6,80 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="320" Height="320">
+    <Grid Background="Black" Width="320">
+        <ListView Width="320">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="320" >
+                <StackPanel Height="60" >
+                    <TextBlock  Name="mes" Text="995" Height="50" Foreground="Snow" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,25,0,0" FontWeight="Bold" Visibility="Collapsed"/>
+
+                    <AppBarButton x:Name="appBarButton"
+                          Grid.Column="3"
+                HorizontalAlignment="Right"   
+                Icon="Forward" Label=""   
+                VerticalAlignment="Top"   
+                Width="50" Height="44"  Click="appBarButton_Click" />
+                </StackPanel>
+                <Border Height="3" Width="300" Background="White" />
+                <StackPanel Orientation="Horizontal" Height="70" Width="280" Margin="0,5,0,5" PointerPressed="WifiPanel_PointerPressed">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="40" Width="40" Text="&#xE701;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold" Margin="0,0,0,10" />
+                    <TextBlock  Text="Wi-Fi" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" />
+                    <ToggleSwitch x:Name="m_WifiRadio" Toggled="WifiRadio_Toggled" />
+                </StackPanel>
+                <Border Height="3" Width="300" Background="White" />
+                <StackPanel x:Name="SPbluetooth" Orientation="Horizontal" Height="70" Width="280" Margin="-5,5,0,5" PointerPressed="BluetoothPanel_PointerPressed" Visibility="Visible">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="45"  Width="45" Text="&#xE702;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold"/>
+                    <TextBlock  Text="Bluetooth" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold"/>
+                    <ToggleSwitch x:Name="m_BluetoothRadio" Toggled="Bluetooth_Toggled"/>
+                </StackPanel>
+
+                <Border Height="3" Width="300" Background="White" />
+                <StackPanel x:Name="SPsoundeffect" Orientation="Horizontal" Height="70" Width="280" Margin="-5,5,0,5" PointerPressed="BluetoothPanel_PointerPressed" Visibility="Visible">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="45"  Width="45" Text="&#xE767;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold"/>
+                    <TextBlock  Text="SoundEffect" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold"/>
+                    <ToggleSwitch x:Name="m_soundeffect" Toggled="SoundEffect_Toggled"/>
+                </StackPanel>
+                <Border Height="3" Width="300" Background="White" />
+                <StackPanel x:Name="ResetButton" Orientation="Horizontal"  Width="280" Margin="-5,5,0,5">
+                    <Button Content="Reset" HorizontalAlignment="Center" VerticalAlignment="Center"  Click="Button_Click" Height="70" Width="200" FontSize="40" Margin="40,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </ListView>
+
+        <Popup x:Name="PopupFailMessage" IsOpen="False" Height="260" Width="318" Margin="0,0,0,0"  >
+
+            <StackPanel x:Name="PopupSPanel" Background="Black" Visibility="Visible" BorderBrush="White" BorderThickness="1" Tapped="SPTap" Width="318" Height="260" Margin="1,0,0,0">
+                <ListView Width="318" Height="260">
+
+                    <TextBlock x:Name="state" Text="Init WiFi or Bluetooth fail, please reboot device and try again!!!" FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290"/>
+                    <TextBlock x:Name="Message"  FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290" />
+                </ListView>
+            </StackPanel>
+
+        </Popup>
+
+        <Popup x:Name="PopupResetMessage" IsOpen="False" Height="70" Width="318" Margin="0,0,0,0" >
+
+            <StackPanel x:Name="PopupResetSPanel" Background="Black" Visibility="Visible" BorderBrush="White" BorderThickness="1" Tapped="ResetSPTap" Width="318" Height="70" Margin="1,0,0,0">
+                <ListView Width="318" Height="70">
+
+                    <TextBlock x:Name="resetstate" Text="Resetting....." FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290"/>
+                    <TextBlock x:Name="resetMessage"  FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290" />
+                </ListView>
+            </StackPanel>
+
+        </Popup>
+
+    </Grid>
+
+
+
+
+
+ <!--
+    <ListView Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="320" Height="420">
             <StackPanel Height="60" >
                 <TextBlock  Name="mes" Text="995" Height="50" Foreground="Snow" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,25,0,0" FontWeight="Bold" Visibility="Collapsed"/>
 
@@ -20,24 +91,59 @@
                 Width="50" Height="44"  Click="appBarButton_Click" />
             </StackPanel>
             <Border Height="3" Width="300" Background="White" />
-        <StackPanel Orientation="Horizontal" Height="70" Width="280" Margin="0,5,0,5" PointerPressed="WifiPanel_PointerPressed">
-            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="40" Width="40" Text="&#xE701;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold" Margin="0,0,0,10" />
-            <TextBlock  Text="Wi-Fi" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" />
-            <ToggleSwitch x:Name="m_WifiRadio" Toggled="WifiRadio_Toggled" />
-        </StackPanel>
+            <StackPanel Orientation="Horizontal" Height="70" Width="280" Margin="0,5,0,5" >
+                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="40" Width="40" Text="&#xE701;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold" Margin="0,0,0,10" />
+                <TextBlock  Text="Wi-Fi" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" />
+                <ToggleSwitch x:Name="m_WifiRadio" Toggled="WifiRadio_Toggled" />
+            </StackPanel>
             <Border Height="3" Width="300" Background="White" />
-        <StackPanel x:Name="SPbluetooth" Orientation="Horizontal" Height="70" Width="280" Margin="-5,5,0,5" PointerPressed="BluetoothPanel_PointerPressed" Visibility="Visible">
-            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="45"  Width="45" Text="&#xE702;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold"/>
-            <TextBlock  Text="Bluetooth" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold"/>
-            <ToggleSwitch x:Name="m_BluetoothRadio" Toggled="Bluetooth_Toggled"/>
-        </StackPanel>
-        
-        <Border Height="3" Width="300" Background="White" />
-            <StackPanel x:Name="SPsoundeffect" Orientation="Horizontal" Height="70" Width="280" Margin="-5,5,0,5" PointerPressed="BluetoothPanel_PointerPressed" Visibility="Visible">
+            <StackPanel x:Name="SPbluetooth" Orientation="Horizontal" Height="70" Width="280" Margin="-5,5,0,5" >
+                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="45"  Width="45" Text="&#xE702;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold"/>
+                <TextBlock  Text="Bluetooth" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold"/>
+                <ToggleSwitch x:Name="m_BluetoothRadio" Toggled="Bluetooth_Toggled"/>
+            </StackPanel>
+            <Border Height="3" Width="300" Background="White" />
+            <StackPanel x:Name="SPsoundeffect" Orientation="Horizontal" Height="70" Width="280" Margin="-5,5,0,5" >
                 <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="45"  Width="45" Text="&#xE767;" VerticalAlignment="Center" Foreground="Snow" FontWeight="Bold"/>
-                <TextBlock  Text="SoundEffect" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold"/>
+                <TextBlock  Text="soundeffect" FontSize="30" Foreground="Snow" Width="175" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold"/>
                 <ToggleSwitch x:Name="m_soundeffect" Toggled="SoundEffect_Toggled"/>
             </StackPanel>
+            <Border Height="3" Width="300" Background="White" />
+            <StackPanel x:Name="ResetButton" Orientation="Horizontal" Height="180" Width="280" Margin="-5,5,0,5">
+                <Button Content="Reset" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,-80,0,0" Click="Button_Click" Height="70" Width="200" FontSize="40"/>
+            </StackPanel>
+
         </StackPanel>
-    </Grid>
+
+
+
+
+
+        <Popup x:Name="PopupFailMessage" IsOpen="False" Height="260" Width="318" Margin="0,0,0,0"  >
+
+            <StackPanel x:Name="PopupSPanel" Background="Black" Visibility="Visible" BorderBrush="White" BorderThickness="1" Tapped="SPTap" Width="318" Height="260" Margin="1,0,0,0">
+                <ListView Width="318" Height="260">
+
+                    <TextBlock x:Name="state" Text="Init WiFi or Bluetooth fail, please reboot device and try again!!!" FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290"/>
+                    <TextBlock x:Name="Message"  FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290" />
+                </ListView>
+            </StackPanel>
+
+        </Popup>
+
+        <Popup x:Name="PopupResetMessage" IsOpen="False" Height="260" Width="318" Margin="-20,-900,0,0" >
+
+            <StackPanel x:Name="PopupResetSPanel" Background="Black" Visibility="Visible" BorderBrush="White" BorderThickness="1" Tapped="ResetSPTap" Width="318" Height="260" Margin="1,0,0,0">
+                <ListView Width="318" Height="260">
+
+                    <TextBlock x:Name="resetstate" Text="Reset BT/Wifi/Brightness and Data Clean success!!!" FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290"/>
+                    <TextBlock x:Name="resetMessage"  FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290" />
+                </ListView>
+            </StackPanel>
+
+        </Popup>
+
+    </ListView>
+    -->
+
 </Page>

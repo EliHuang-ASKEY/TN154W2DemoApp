@@ -71,8 +71,8 @@ namespace IOTCoreMasterApp.LocalApps
             await RunProcess("GetRegValue.exe", s, 4);
             s = "PhoneManufacturerModelName";
             await RunProcess("GetRegValue.exe", s, 5);            
-            s = "OEMImageVersion";
-            await RunProcess("GetRegValue.exe", s,6);
+            //s = "OEMImageVersion";
+           // await RunProcess("GetRegValue.exe", s,6);
             //s = "OEMBuildVersion";
             //await RunProcess("GetRegValue.exe", s, 7);
             s = "c:\\DPP\\OEM\\factory.ini General ro.serialno -G";
@@ -138,7 +138,7 @@ namespace IOTCoreMasterApp.LocalApps
                                     this.m_ManufacturerModelName.Text = stringRead;
                                     break;
                                 case 6:                        
-                                    this.m_OEMImageVersion.Text = stringRead;
+                                    //this.m_OEMImageVersion.Text = stringRead;
                                     break;
                                 case 7:
                                     //this.m_OEMBuildVersion.Text = stringRead;

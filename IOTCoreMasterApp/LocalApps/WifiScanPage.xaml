@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
+    <Grid>
     <StackPanel Background="black" Width="320" Height="320" >
         <Border Height="1" Width="300" Background="#FF8D7A7A" Margin="0,15,0,5" />
         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -38,5 +38,19 @@
             </ListView.ItemTemplate>
         </ListView>
         <Border Height="1" Width="300" Background="#FF8D7A7A" Margin="0,5,0,5" />
+        
     </StackPanel>
+        <Popup x:Name="PopupFailMessage" IsOpen="True" Height="260" Width="318" Margin="0,0,0,0"  >
+
+            <StackPanel x:Name="PopupSPanel" Background="Black" Visibility="Visible" BorderBrush="White" BorderThickness="1" Tapped="SPTap" Width="318" Height="260" Margin="1,0,0,0">
+                <ListView Width="318" Height="260">
+                    <TextBlock x:Name="Title" Text="ERROR!!" FontSize="30" Foreground="Red"  VerticalAlignment="Center" HorizontalAlignment="Center"   FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="auto"/>
+
+                    <TextBlock x:Name="state" Text="Please Reboot Device or Go to 「Setting」→ switch「Wi-Fi」and try again" FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290"/>
+                    <TextBlock x:Name="Message"  FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" Width="290" />
+                </ListView>
+            </StackPanel>
+         
+        </Popup>
+    </Grid>
 </Page>

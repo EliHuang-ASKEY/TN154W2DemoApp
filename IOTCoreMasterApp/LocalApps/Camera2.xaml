@@ -68,11 +68,11 @@
             </StackPanel.ChildrenTransitions>
 
             <Button Name="ZoomButton" Content="Zoom" Click="ZoomButton_Click"/>
-            <Button Name="FocusButton" Content="Focus" Click="ManualControlButton_Click"/>
+            <Button Name="FocusButton" Content="Focus" Click="ManualControlButton_Click" Visibility="Collapsed" />
         
         </StackPanel>
         
-        <ScrollViewer  Margin="12,80,12,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Visibility="Visible">
+        <ScrollViewer  Margin="12,80,12,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Visibility="Collapsed">
             <TextBox
 				x:Name="status" TextWrapping="Wrap" IsReadOnly="True" Height="200" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" 
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" />

@@ -1119,7 +1119,7 @@ namespace IOTCoreMasterApp.LocalApps
             {
                 ManualControlsGrid.Visibility = Visibility.Collapsed;
                 _isZoomBtn = false;
-                FocusButton.Visibility = Visibility.Visible;
+                FocusButton.Visibility = Visibility.Collapsed;
             }
         }
 

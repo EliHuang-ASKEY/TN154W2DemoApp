@@ -18,6 +18,7 @@ using Windows.Networking.Connectivity;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Windows.Security.Credentials;
+using System.Diagnostics;
 
 // 空白頁項目範本已記錄在 http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -154,30 +155,41 @@ namespace IOTCoreMasterApp.LocalApps
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var access = await WiFiAdapter.RequestAccessAsync();
-            if (access != WiFiAccessStatus.Allowed)
+            PopupFailMessage.IsOpen = false;
+            try
             {
-                //rootPage.NotifyUser("Access denied", NotifyType.ErrorMessage);
-            }
-            else
-            {
-                var result = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(WiFiAdapter.GetDeviceSelector());
-                if (result.Count >= 1)
+                var access = await WiFiAdapter.RequestAccessAsync();
+                if (access != WiFiAccessStatus.Allowed)
                 {
-                    m_WifiAdapter = await WiFiAdapter.FromIdAsync(result[0].Id);
-
-                    await m_WifiAdapter.ScanAsync();
-
-                    DisplayNetworkReport(m_WifiAdapter.NetworkReport);
-
-                    m_ScanButton.IsEnabled = true;
-
+                    //rootPage.NotifyUser("Access denied", NotifyType.ErrorMessage);
                 }
                 else
                 {
-                    //rootPage.NotifyUser("No WiFi Adapters detected on this machine.", NotifyType.ErrorMessage);
+                    var result = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(WiFiAdapter.GetDeviceSelector());
+                    if (result.Count >= 1)
+                    {
+                        m_WifiAdapter = await WiFiAdapter.FromIdAsync(result[0].Id);
+
+                        await m_WifiAdapter.ScanAsync();
+
+                        DisplayNetworkReport(m_WifiAdapter.NetworkReport);
+
+                        m_ScanButton.IsEnabled = true;
+
+                    }
+                    else
+                    {
+                        //rootPage.NotifyUser("No WiFi Adapters detected on this machine.", NotifyType.ErrorMessage);
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                PopupFailMessage.IsOpen = true;
+                //this.Frame.GoBack();
+                Message.Text = ex.ToString();
+            }
+            
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -242,22 +254,26 @@ namespace IOTCoreMasterApp.LocalApps
 
         private async void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedNetwork = m_WifiApCollectionListView.SelectedItem as WifiAvailableAP;
-            var credential = new PasswordCredential();
+            try
+            {
+                var selectedNetwork = m_WifiApCollectionListView.SelectedItem as WifiAvailableAP;
+                var credential = new PasswordCredential();
 
-            this.m_ConnectInfo.flyout.Hide();
+                this.m_ConnectInfo.flyout.Hide();
 
-            credential.Password = m_ConnectInfo.passwordBox.Password;
+                credential.Password = m_ConnectInfo.passwordBox.Password;
 
-            this.ShowProgressRing();
+                this.ShowProgressRing();
 
-            WiFiConnectionResult result = await m_WifiAdapter.ConnectAsync(selectedNetwork.network, WiFiReconnectionKind.Automatic, credential);
+                WiFiConnectionResult result = await m_WifiAdapter.ConnectAsync(selectedNetwork.network, WiFiReconnectionKind.Automatic, credential);
 
-            this.CloseProgressRing();
+                this.CloseProgressRing();
 
-            if (result.ConnectionStatus == WiFiConnectionStatus.Success)
-                this.Frame.GoBack();
-            //throw new NotImplementedException();
+                if (result.ConnectionStatus == WiFiConnectionStatus.Success)
+                    this.Frame.GoBack();
+                //throw new NotImplementedException();
+            }
+            catch (Exception ex){ Debug.WriteLine(ex.ToString()); }
         }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -276,5 +292,10 @@ namespace IOTCoreMasterApp.LocalApps
             m_WifiApCollectionListView.IsEnabled = true;
         }
 
+        private void SPTap(object sender, TappedRoutedEventArgs e)
+        {
+            PopupFailMessage.IsOpen = false;
+            //this.Frame.GoBack();
+        }
     }
 }

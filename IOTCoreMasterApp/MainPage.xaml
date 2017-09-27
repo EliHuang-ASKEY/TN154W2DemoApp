@@ -16,7 +16,7 @@
             Source="{StaticResource TheViewModel}" />
         <!-- DataContext= "{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"-->
     </Page.DataContext>
-    
+
     <Grid>
         <ComboBox x:Name="ScrollAlignment" SelectedIndex="0" Width="100" Visibility="Collapsed">
             <ComboBoxItem Content="Default">
@@ -55,15 +55,23 @@
         <Grid Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <TextBlock Name="Brightness"  Width="250"/>
         </Grid>
-        <Grid Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Rectangle Width="100" Height="30" HorizontalAlignment="Left" Stroke="#FF9E9898" StrokeThickness="2" VerticalAlignment="Top" />
-            <Rectangle Name="batteryPercent" Width="{Binding batteryPercent}" Height="20" HorizontalAlignment="Left" StrokeThickness="0" VerticalAlignment="Center" Fill="#FF3DBB0D" Margin="3" />
-            <TextBlock Text="{Binding batteryStatus}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </Grid>
+        <RelativePanel Width="120" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+           <Grid x:Name="Charging" Width="20" Height="30" VerticalAlignment="Bottom">
+               <Image x:Name="ChargingPng" HorizontalAlignment="Center" Height="20" VerticalAlignment="Center" Width="20" Source="Assets/Charging.png" Visibility="Visible"/>
+           </Grid>
+            <Grid Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" RelativePanel.RightOf="Charging">
+                <Rectangle Width="100" Height="30" HorizontalAlignment="Left" Stroke="#FF9E9898" StrokeThickness="2" VerticalAlignment="Top" />
+                <Rectangle Name="batteryPercent" Width="{Binding batteryPercent}" Height="20" HorizontalAlignment="Left" StrokeThickness="0" VerticalAlignment="Center" Fill="#FF3DBB0D" Margin="3" />
+                <TextBlock Text="{Binding batteryPercent}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="26" />
+            </Grid>
+
+        </RelativePanel>
         <!-- <maps:MapControl x:Name="myMap" MapServiceToken="sojiwiG3TtS50Mc5fWX5~_MwV4dgClD2lxKKILWScQA~AhKS0bNdcJhYEnb0NDiFva8nAbejhoNpkgQmnygjmcYkixhIj8tkH8RNVnifre2n" ZoomLevel="0"></maps:MapControl>
         -->
         <MediaPlayerElement  x:Name="mediaPlayerAudio"  Visibility="Collapsed"  />
         
+        
+
     </Grid>
 </Page>
 <!--ItemsSource="{Binding appList}"-->
