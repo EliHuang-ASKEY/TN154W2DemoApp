@@ -1,0 +1,73 @@
+﻿<Page
+    x:Class="IOTCoreMasterApp.LocalApps.Map"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IOTCoreMasterApp.LocalApps"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Maps:MapControl x:Name="myMap"/>
+
+        <RelativePanel>
+            <Button x:Name="Locat" Content="Location" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Locat_Click" Margin="10,10,0,0" Foreground="Black"  />
+            <Button x:Name="Detail" Content="Detail" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Detail_Click" Margin="10,10,0,0" Foreground="Black" RelativePanel.RightOf="Locat" />
+        </RelativePanel>
+      
+        <AppBarButton  HorizontalAlignment="Right" VerticalAlignment="Top" Icon="Forward" Click="AppBarButton_Click" Foreground="Black" />
+
+
+            <StackPanel x:Name="PopupResetSPanel" Background="Black" Visibility="Collapsed" BorderBrush="White" BorderThickness="1"  Height="70" Margin="1,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+
+                    <TextBlock x:Name="resetstate" Text="Locating....." FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" />
+                   
+            </StackPanel>
+
+
+        <StackPanel x:Name="PopupfailSPanel"  Background="Black" Visibility="Collapsed" BorderBrush="White" BorderThickness="1" Tapped="SPTap" Height="70" Margin="1,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+
+            <TextBlock x:Name="failstate" Text="Locate Failed" FontSize="30" Foreground="Red"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto" />
+
+        </StackPanel>
+
+        <StackPanel x:Name="tablePanel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="#7F000000" Visibility="Collapsed" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Source:"  VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Latitude:"  VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Longitude:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Accuracy:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Sou" Grid.Row="0" Grid.Column="2" Text="No Data" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <TextBlock x:Name="Lat" Grid.Row="1" Grid.Column="2" Text="No Data" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <TextBlock x:Name="Lon" Grid.Row="2" Grid.Column="2" Text="No Data" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <TextBlock x:Name="Acc" Grid.Row="3" Grid.Column="2" Text="No Data" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+
+            </Grid>
+
+
+
+
+
+        </StackPanel>
+
+
+    </Grid>
+    
+
+
+</Page>
