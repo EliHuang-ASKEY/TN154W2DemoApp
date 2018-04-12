@@ -148,6 +148,9 @@
     <Compile Include="LocalApps\Location2.xaml.cs">
       <DependentUpon>Location2.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LocalApps\Map.xaml.cs">
+      <DependentUpon>Map.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LocalApps\MediaPlayer.xaml.cs">
       <DependentUpon>MediaPlayer.xaml</DependentUpon>
     </Compile>
@@ -188,7 +191,9 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Charging.png" />
     <Content Include="Assets\flashlight.png" />
+    <Content Include="Assets\Map.png" />
     <Content Include="factory_ini_set_v2.exe" />
     <Content Include="soundsaaa16.wav" />
     <None Include="Package.StoreAssociation.xml" />
@@ -294,6 +299,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LocalApps\Location2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LocalApps\Map.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

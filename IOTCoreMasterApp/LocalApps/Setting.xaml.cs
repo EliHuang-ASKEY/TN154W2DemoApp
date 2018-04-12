@@ -481,7 +481,7 @@ namespace IOTCoreMasterApp.LocalApps
                 }
 
 
-                //delete all files in Video floder
+                //delete all files in Video folder
                 var Videofiles = await KnownFolders.VideosLibrary.GetFilesAsync();
 
                 foreach (var file in Videofiles)
@@ -490,7 +490,7 @@ namespace IOTCoreMasterApp.LocalApps
                 }
 
 
-                //delete all files in Picture floder
+                //delete all files in Picture folder
                 var Picturefiles = await KnownFolders.PicturesLibrary.GetFilesAsync();
 
                 foreach (var file in Picturefiles)
@@ -499,7 +499,7 @@ namespace IOTCoreMasterApp.LocalApps
                 }
 
 
-                //delete all files in Music floder
+                //delete all files in Music folder
                 var Musicfiles = await KnownFolders.MusicLibrary.GetFilesAsync();
 
                 foreach (var file in Musicfiles)

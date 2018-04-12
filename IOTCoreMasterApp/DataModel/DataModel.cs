@@ -66,11 +66,12 @@ namespace IOTCoreMasterApp.DataModel
             set { _batterySatus = value; OnPropertyChanged(); }
         }
 
-        private int _batteryPercent = 50;
-        public int batteryPercent
+        private string _batteryPercent = "50%";
+        public string batteryPercent
         {
             get
             {
+                /*
                 if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
                 {
                     return 30;
@@ -79,6 +80,9 @@ namespace IOTCoreMasterApp.DataModel
                 {
                     return _batteryPercent;
                 }
+                */
+
+                return _batteryPercent;
 
             }
             set { _batteryPercent = value; OnPropertyChanged(); }
@@ -137,7 +141,7 @@ namespace IOTCoreMasterApp.DataModel
                 }
             }
 
-            batteryPercent = PowerManager.RemainingChargePercent;
+            batteryPercent = PowerManager.RemainingChargePercent.ToString()+"%";
             
             
         }
@@ -335,6 +339,19 @@ namespace IOTCoreMasterApp.DataModel
             //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
             litem.Name = "Location";
             appList.Add(litem);
+
+            /*
+            litem = new AppListItem();
+            litem.PackageFullName = "local:Map";
+            //StorageFile file;
+            clocklogo = new Uri("ms-appx:///Assets/Map.png");
+            litem.ImageSrc = new BitmapImage();
+            litem.ImageSrc.UriSource = clocklogo;
+            //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
+            //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
+            litem.Name = "Map";
+            appList.Add(litem);
+            */
 
             litem = new AppListItem();
             litem.PackageFullName = "local:DeviceContrl";

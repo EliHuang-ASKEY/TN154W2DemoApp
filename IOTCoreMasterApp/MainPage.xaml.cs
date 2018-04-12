@@ -321,8 +321,14 @@ namespace IOTCoreMasterApp
                 }
                 else if (item.PackageFullName.Contains("Location2"))
                 {
-                    this.Frame.Navigate(typeof(Location2));
+                    this.Frame.Navigate(typeof(Map));
                 }
+                /*
+                else if (item.PackageFullName.Contains("Map"))
+                {
+                    this.Frame.Navigate(typeof(Map));
+                }
+                */
                 else if (item.PackageFullName.Contains("Setting"))
                 {
                     this.Frame.Navigate(typeof(Setting));
