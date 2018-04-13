@@ -1,0 +1,1 @@
+int activity_recognition_example_main(void);
