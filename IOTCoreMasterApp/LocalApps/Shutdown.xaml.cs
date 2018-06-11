@@ -97,7 +97,7 @@ namespace IOTCoreMasterApp.LocalApps
             SPstate.Visibility = Visibility.Visible;
             SPshutdown.Visibility = Visibility.Collapsed;
             
-            shbo.SetBrightnessLevel(_Time/100, DisplayBrightnessOverrideOptions.None);
+            //shbo.SetBrightnessLevel(_Time/100, DisplayBrightnessOverrideOptions.None);
             this.timerProgress.Start();
             
         }
@@ -109,7 +109,7 @@ namespace IOTCoreMasterApp.LocalApps
             SPstate.Visibility = Visibility.Visible;
             SPshutdown.Visibility = Visibility.Collapsed;
             
-            shbo.SetBrightnessLevel(_Time / 100, DisplayBrightnessOverrideOptions.None);
+            //shbo.SetBrightnessLevel(_Time / 100, DisplayBrightnessOverrideOptions.None);
             this.timerProgress.Start();
             
            
@@ -122,7 +122,7 @@ namespace IOTCoreMasterApp.LocalApps
             _Time = _Time-2;
             state.Text += ".";
             
-            shbo.SetBrightnessLevel(_Time / 100, DisplayBrightnessOverrideOptions.None);
+            //shbo.SetBrightnessLevel(_Time / 100, DisplayBrightnessOverrideOptions.None);
             if (_Time > MaxTime) return;
 
 
@@ -132,7 +132,7 @@ namespace IOTCoreMasterApp.LocalApps
                 this.timerProgress.Stop();
                 timerProgress.Tick -= UpdateTime;
                 
-                shbo.SetBrightnessLevel(0, DisplayBrightnessOverrideOptions.None);
+                //shbo.SetBrightnessLevel(0, DisplayBrightnessOverrideOptions.None);
                 //shbo.StopOverride();
                 if (_shutdown)
                     ShutdownManager.BeginShutdown(ShutdownKind.Shutdown, TimeSpan.FromSeconds(0.5));

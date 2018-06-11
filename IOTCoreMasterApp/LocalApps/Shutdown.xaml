@@ -7,25 +7,30 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
-        <StackPanel x:Name="pageTitle"   Orientation="Horizontal" HorizontalAlignment="Right">
-
-
-            <AppBarButton x:Name="appBarButton"   
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+ 
+        <AppBarButton x:Name="appBarButton"   
                     HorizontalAlignment="Right"   
                     Icon="Forward" Label=""   
                     VerticalAlignment="Top"   
                     Width="50" Height="44"  Click="appBarButton_Click"
                     />
-        </StackPanel>
-        <StackPanel Name="SPshutdown" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Height="250"  Width="250" >
-            <Button x:Name="btnSelect"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="Power OFF" Margin="10, 0, 0, 0" Click="btnShutdown_Click" Width="150" Height="80" FontSize="25"/>
-            <Button x:Name="btnCancel"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="ReBoot" Margin="10, 50, 0, 0" Click="btnReboot_Click" Width="150" Height="80" FontSize="25"/>
+
+        <StackPanel Name="SPshutdown" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" x:Name="btnSelect"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="Power OFF" Margin="10, 0, 0, 0" Click="btnShutdown_Click" Width="150" Height="80" FontSize="25"/>
+            <Button Grid.Row="1" x:Name="btnCancel"  VerticalAlignment="Center" HorizontalAlignment="Center" Content="ReBoot" Margin="10, 50, 0, 0" Click="btnReboot_Click" Width="150" Height="80" FontSize="25"/>
+            </Grid>
         </StackPanel>
         <StackPanel Name="SPstate" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Height="100"  Width="200" Background="Black" Visibility="Collapsed" >
             <TextBlock x:Name="state" Text="" FontSize="24" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
 
         </StackPanel>
+ 
         
     </Grid>
 </Page>

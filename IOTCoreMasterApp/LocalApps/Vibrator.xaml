@@ -7,17 +7,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
-        <StackPanel Orientation="Vertical" >
-            <StackPanel Orientation="Horizontal" Height="100">
-                <TextBlock x:Name="InputTextBlock" TextWrapping="Wrap" Grid.Row="0"  HorizontalAlignment="Left" Text="Vibrator Test" Width="270" FontSize="40"/>
-                <AppBarButton x:Name="appBarButton"
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+        <AppBarButton x:Name="appBarButton"
                           Grid.Column="3"
                 HorizontalAlignment="Right"   
                 Icon="Forward" Label=""   
                 VerticalAlignment="Top"   
                 Width="50" Height="44"  Click="appBarButton_Click" />
-            </StackPanel>
+
+         <TextBlock x:Name="InputTextBlock" TextWrapping="Wrap" Grid.Row="0"  HorizontalAlignment="Left" Text="Vibrator Test" Width="270" FontSize="40"/>
+   
+ 
             <!--
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -49,11 +53,11 @@
                 </TextBlock>
             </Grid>
             -->
-            <StackPanel Height="120">
+            <StackPanel Grid.Row="1" VerticalAlignment="Center">
                 <Button x:Name="VibratorStart" Content="Start" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,10,10,0" Click="VibratorEnable" FontSize="70" Height="100" Width="250" FontWeight="Medium"/>
 
             </StackPanel>
             
-        </StackPanel>
+       
     </Grid>
 </Page>

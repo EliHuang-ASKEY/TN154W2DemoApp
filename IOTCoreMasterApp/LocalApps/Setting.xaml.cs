@@ -37,13 +37,38 @@ namespace IOTCoreMasterApp.LocalApps
 
         private BrightnessOverride bo;
 
+        double x=0;
+
+        public static string wifi_switch_flag = "";
+
 
         public Setting()
         {
             this.InitializeComponent();
+            this.ManipulationMode = ManipulationModes.TranslateY;            //设置这个页面的手势模式为豎向滑动  
+            this.ManipulationCompleted += The_ManipulationCompleted;         //订阅手势滑动结束后的事件   
+            this.ManipulationDelta += The_ManipulationDelta;
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        //手势滑动中  
+        private void The_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+            x += e.Delta.Translation.Y;     //将滑动的值赋给x   
+        }
+
+
+        //手势滑动结束  
+        private void The_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+            if (x > 100)                    //判断滑动的距离  
+                MySplit.IsPaneOpen = true;    //打开汉堡菜单  
+            if (x < -100)
+                MySplit.IsPaneOpen = false;   //关闭汉堡菜单  
+            x = 0;  //清零x，不然x会累加  
+        }
+
+
+    protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             PopupFailMessage.IsOpen = false;
 
@@ -267,6 +292,15 @@ namespace IOTCoreMasterApp.LocalApps
                     break;
             }
         }
+
+        private void SoundPanel_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            if (!this.m_soundeffect.IsOn)
+            {
+                this.m_soundeffect.IsOn = true;
+                SoundEffectState = true;
+            }
+        }
         private async void Bluetooth_Toggled(object sender, RoutedEventArgs e)
         {
             
@@ -309,7 +343,7 @@ namespace IOTCoreMasterApp.LocalApps
                 {
                     if (this.m_RaidoController.Wifi.State == RadioState.On)
                     {
-
+                        wifi_switch_flag = "on";
                     }
                     else
                     {
@@ -320,7 +354,7 @@ namespace IOTCoreMasterApp.LocalApps
                 {
                     if (this.m_RaidoController.Wifi.State == RadioState.Off)
                     {
-
+                        wifi_switch_flag = "off";
                     }
                     else
                     {
@@ -343,8 +377,8 @@ namespace IOTCoreMasterApp.LocalApps
             var minorVersion = (version & 0x0000FFFF00000000L) >> 32;
             var buildVersion = (version & 0x00000000FFFF0000L) >> 16;
             var revisionVersion = (version & 0x000000000000FFFFL);
-            if(buildVersion > 14393) SPbluetooth.Visibility = Visibility.Visible;
-            else if(buildVersion == 14393 & revisionVersion >= 448) SPbluetooth.Visibility = Visibility.Visible;
+            //if(buildVersion > 14393) SPbluetooth.Visibility = Visibility.Visible;
+            //else if(buildVersion == 14393 & revisionVersion >= 448) SPbluetooth.Visibility = Visibility.Visible;
 
 
 
@@ -453,10 +487,12 @@ namespace IOTCoreMasterApp.LocalApps
             PopupResetMessage.IsOpen = false;
         }
 
+
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
                 //popup resetting message
                 PopupResetMessage.IsOpen = true;
+                MySplit.IsPaneOpen = false;
 
 
                 //set BT and Wifi switch to off
@@ -508,7 +544,7 @@ namespace IOTCoreMasterApp.LocalApps
                 }
 
                 //close resetting message
-                PopupFailMessage.IsOpen = false;
+                PopupResetMessage.IsOpen = false;
 
                 await Task.Delay(2000);
 

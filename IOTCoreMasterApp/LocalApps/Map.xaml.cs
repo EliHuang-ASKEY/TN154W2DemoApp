@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
@@ -25,6 +26,8 @@ namespace IOTCoreMasterApp.LocalApps
     /// </summary>
     public sealed partial class Map : Page
     {
+
+        private Geolocator geolocator = null;
         public Map()
         {
             this.InitializeComponent();
@@ -47,7 +50,9 @@ namespace IOTCoreMasterApp.LocalApps
                 Geolocator geolocator = new Geolocator { ReportInterval = 2000 };
                 Geoposition pos = await geolocator.GetGeopositionAsync();
 
-                if(pos != null)
+                geolocator.PositionChanged += OnPositionChanged;
+
+                if (pos != null)
                 {
                     BasicGeoposition loact = new BasicGeoposition() { Latitude = pos.Coordinate.Point.Position.Latitude, Longitude = pos.Coordinate.Point.Position.Longitude };
                     Geopoint locatPoint = new Geopoint(loact);
@@ -99,6 +104,16 @@ namespace IOTCoreMasterApp.LocalApps
             }
         }
 
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            if (geolocator != null)
+            {
+                geolocator.PositionChanged -= OnPositionChanged;
+                //geolocator.StatusChanged -= OnStatusChanged;
+            }
+
+            base.OnNavigatingFrom(e);
+        }
         private void Detail_Click(object sender, RoutedEventArgs e)
         {     
 
@@ -111,5 +126,35 @@ namespace IOTCoreMasterApp.LocalApps
             tablePanel.Visibility = Visibility.Visible;
 
         }
+
+        async private void OnPositionChanged(Geolocator sender, PositionChangedEventArgs e)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                //_rootPage.NotifyUser("Location updated.", NotifyType.StatusMessage);
+                UpdateLocationData(e.Position);
+            });
+        }
+
+        private void UpdateLocationData(Geoposition position)
+        {
+            if (position == null)
+            {
+                Sou.Text = "No data";
+                Lat.Text = "No data";
+                Lon.Text = "No data";
+                Acc.Text = "No data";
+            }
+            else
+            {
+                Lat.Text = position.Coordinate.Point.Position.Latitude.ToString();
+                Lon.Text = position.Coordinate.Point.Position.Longitude.ToString();
+                Acc.Text = position.Coordinate.Accuracy.ToString();
+                Sou.Text = position.Coordinate.PositionSource.ToString();
+            }
+        }
+
+
+        
     }
 }

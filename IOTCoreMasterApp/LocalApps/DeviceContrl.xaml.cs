@@ -81,7 +81,7 @@ namespace IOTCoreMasterApp.LocalApps
 
             if (bo == null)
             {
-                sMsg.Text = "This Devices not support BrightnessOverride" + "\n" + "\n" + sErrMessage;
+                //sMsg.Text = "This Devices not support BrightnessOverride" + "\n" + "\n" + sErrMessage;
             }
 
 

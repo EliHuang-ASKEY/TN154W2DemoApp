@@ -33,9 +33,9 @@
 
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
         <CaptureElement x:Name="previewElement" Stretch="Uniform" Visibility="Visible"  />
-        <Image x:Name="ShowImage" Width="320" Height="320" Stretch="Uniform" Tapped="CloseShowImage"  Visibility="Collapsed"  />
+        <Image x:Name="ShowImage" Stretch="Uniform" Tapped="CloseShowImage"  Visibility="Collapsed"  />
         <Canvas Name="FocusCanvas">
             <Rectangle Name="FocusRectangle" Stroke="White" StrokeThickness="2" Visibility="Collapsed"/>
         </Canvas>
@@ -51,7 +51,7 @@
                     />
 
         </StackPanel>
-        <TextBlock x:Name="TextTime" Text="00:30"  Width="50" Height="30" Margin="70,0,0,270" FontSize="18" Foreground="#FFFD0000"  />
+        <TextBlock x:Name="TextTime" Text="00:30"  Width="50" Height="30"  FontSize="18" Foreground="#FFFD0000" HorizontalAlignment="Center" VerticalAlignment="Top" />
 
         <StackPanel Name="ScenarioControlStackPanel" Grid.Row="0" HorizontalAlignment="Left" MinWidth="88" Orientation="Horizontal">
             <StackPanel.Resources>
@@ -111,7 +111,7 @@
             </Grid>
         </Grid>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" >
             <StackPanel.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Margin" Value="0,0"/>
@@ -138,10 +138,12 @@
                     <SymbolIcon Symbol="Camera"/>
                 </Viewbox>
             </Button>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" >
 
             <Image x:Name="captureImage" Width="60" Height="60" Visibility="Visible" Tapped="ShowPhoto" Margin="70,10,0,10" />
 
-
         </StackPanel>
+
     </Grid>
 </Page>

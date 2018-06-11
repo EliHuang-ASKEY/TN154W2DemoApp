@@ -26,6 +26,8 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Media.Core;
 using IOTCoreMasterApp.Controls;
+using Windows.System.Threading;
+using System.Threading.Tasks;
 
 
 
@@ -49,6 +51,10 @@ namespace IOTCoreMasterApp
         private const int Flash_PIN = 112;
         private GpioPin flashPin112;
         private GpioOpenStatus openStatus;
+        private ThreadPoolTimer Battery_timer;
+        private string sMessage;
+        private DataModel.TestLog Shutdown_log_timer;
+        private int Batterylevel = 13;
 
         private Windows.UI.Core.CoreDispatcher messageDispatcher = Window.Current.CoreWindow.Dispatcher;
         public MainPage()
@@ -61,15 +67,44 @@ namespace IOTCoreMasterApp
             Windows.System.Power.PowerManager.BatteryStatusChanged += PowerManager_BatteryStatusChanged;
             //batteryPercent.SizeChanged += PowerManager_RemainingChargePercentChanged;
             show_charging_png();
+            Battery_timer = ThreadPoolTimer.CreatePeriodicTimer(Battery_check_Timer_Tick, TimeSpan.FromMilliseconds(10000));
 
 
         }
+
+        private async void Battery_check_Timer_Tick(ThreadPoolTimer timer)
+        {
+            sMessage = "";
+            sMessage += "Shutdwon, Battery_Percentage:" + Windows.System.Power.PowerManager.RemainingChargePercent + "\r\n";
+
+            if (Windows.System.Power.PowerManager.RemainingChargePercent <=Batterylevel)
+            {
+                Battery_timer.Cancel();
+
+                Shutdown_log_timer = new TestLog("Shutdown_log_timer.txt");
+                await Task.Delay(1000);
+                Shutdown_log_timer.WriteText(sMessage);
+
+
+                
+                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                () =>
+                {
+                    this.Frame.Navigate(typeof(AutoShutdown));
+                });
+                
+
+
+            }
+
+        }
+
         private void PowerManager_RemainingChargePercentChanged(object sender, object e)
         {
 
            
             Debug.WriteLine("BatteryPercentMainXaml" + Windows.System.Power.PowerManager.RemainingChargePercent.ToString());
-            if (Windows.System.Power.PowerManager.RemainingChargePercent < 8)
+            if (Windows.System.Power.PowerManager.RemainingChargePercent <= Batterylevel)
                 this.Frame.Navigate(typeof(AutoShutdown));
             //Battery Perenct < 5  device shutdown
             //if (Windows.System.Power.PowerManager.RemainingChargePercent < 5)
@@ -301,12 +336,12 @@ namespace IOTCoreMasterApp
                 {
                     this.Frame.Navigate(typeof(Accelerometer));
                 }
-                
+                /*
                 else if (item.PackageFullName.Contains("SensorCompass"))
                 {
                     this.Frame.Navigate(typeof(SensorCompass));
                 }
-                
+                */
                 else if (item.PackageFullName.Contains("SensorGyrometer"))
                 {
                     this.Frame.Navigate(typeof(SensorGyrometer));
@@ -319,14 +354,24 @@ namespace IOTCoreMasterApp
                 {
                     this.Frame.Navigate(typeof(NFCTest));
                 }
+                //linda 0511 add wificonnectFromFile
+                else if (item.PackageFullName.Contains("WifiConnectFromFile"))
+                {
+                    this.Frame.Navigate(typeof(WifiConnectFromFile));
+                }//linda 0511 add wificonnectFromFile
                 else if (item.PackageFullName.Contains("Location2"))
                 {
-                    this.Frame.Navigate(typeof(Map));
+                    this.Frame.Navigate(typeof(Location2));
                 }
                 /*
                 else if (item.PackageFullName.Contains("Map"))
                 {
                     this.Frame.Navigate(typeof(Map));
+                }
+                
+                else if (item.PackageFullName.Contains("autotest"))
+                {
+                    this.Frame.Navigate(typeof(autotest));
                 }
                 */
                 else if (item.PackageFullName.Contains("Setting"))
@@ -351,6 +396,10 @@ namespace IOTCoreMasterApp
                         //this.Frame.Navigate(typeof(FlashLight), flashPin112);
                     //else
                         this.Frame.Navigate(typeof(FlashLight), null);
+                }
+                else if (item.PackageFullName.Contains("AS7000HRM"))
+                {             
+                    this.Frame.Navigate(typeof(AS7000HRM));
                 }
                 else
                 {

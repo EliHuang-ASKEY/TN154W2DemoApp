@@ -17,7 +17,12 @@
         <!-- DataContext= "{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"-->
     </Page.DataContext>
 
-    <Grid>
+    <Grid >
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="7*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <ComboBox x:Name="ScrollAlignment" SelectedIndex="0" Width="100" Visibility="Collapsed">
             <ComboBoxItem Content="Default">
                 <ComboBoxItem.Tag>
@@ -30,13 +35,14 @@
                 </ComboBoxItem.Tag>
             </ComboBoxItem>
         </ComboBox>
-        <ListView Name="appListControl" 
+        <ListView Grid.Row="0" Name="appListControl" 
           ScrollViewer.HorizontalScrollMode="Enabled"
           ScrollViewer.HorizontalScrollBarVisibility="Visible"
           ScrollViewer.IsHorizontalRailEnabled="True"
           ScrollViewer.VerticalScrollMode="Disabled"
+                  VerticalAlignment="Center"
                   
-                  ItemsSource="{Binding appList}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,38">
+                  ItemsSource="{Binding appList}"  HorizontalAlignment="Center" >
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
@@ -55,7 +61,7 @@
         <Grid Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <TextBlock Name="Brightness"  Width="250"/>
         </Grid>
-        <RelativePanel Width="120" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <RelativePanel Grid.Row="1" Width="120" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
            <Grid x:Name="Charging" Width="20" Height="30" VerticalAlignment="Bottom">
                <Image x:Name="ChargingPng" HorizontalAlignment="Center" Height="20" VerticalAlignment="Center" Width="20" Source="Assets/Charging.png" Visibility="Visible"/>
            </Grid>

@@ -23,14 +23,10 @@
             VerticalAlignment="Top"   
             Width="45" Height="44" Click="appBarButton_Click"   
             />
-        <localc:Clock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20"></localc:Clock>
-        <TextBlock x:Name="timeString" Text="00:00:00" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" FontWeight="Bold" Foreground="#FFD8D820" Margin="0,0,0,10" />
-        <AppBarButton x:Name="appBarSettingButton"   
-            HorizontalAlignment="Right"   
-            Icon="Setting" Label=""   
-            VerticalAlignment="Bottom"   
-            Width="45" Height="44" Click="appBarSettingButton_Click" 
-                      Visibility="Collapsed"
-            />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <localc:Clock x:Name="time" HorizontalAlignment="Center" VerticalAlignment="Center"></localc:Clock>
+        </StackPanel>
+        <TextBlock x:Name="timeString" Text="00:00:00" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" FontWeight="Bold" Foreground="#FFD8D820" HorizontalAlignment="Center" VerticalAlignment="Bottom"  />
+
     </Grid>
 </Page>

@@ -7,79 +7,118 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Background="black" Width="320" Height="320">
-        <Border Height="1" Width="300" Background="#FF8D7A7A" Margin="0,10,0,0" />
-        <StackPanel Orientation="Horizontal" Margin="0" >
+    <Grid Background="black" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Height="3" HorizontalAlignment="Stretch" Background="#FF8D7A7A" Margin="0,10,0,0" />
+        <Grid Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="Snow" Text="Device Name" />
+
+                <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="m_DeviceName" FontSize="16" Foreground="#FFC5BCBC" Text="minwinpc" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="Snow" Text="OS Version" />
+
+                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="m_OsVersion" FontSize="16" Foreground="#FFC5BCBC" Text="10.0.10586.0"  />
+                
+            </Grid>
+
             
-            <StackPanel BorderThickness="5" Width="250" Margin="20,0,0,0">
-                <!--StackPanel Orientation="Horizontal" PointerPressed="Setting_PointerPressed">
-                    
-                    <TextBlock x:Name="m_BoardName" FontSize="18.667" Foreground="#FF1BA7E8" Text="Askey PCA6800"/>
-                    
-                </StackPanel-->
-                <StackPanel Orientation="Horizontal" >
-                    <TextBlock FontSize="16" Foreground="Snow" Text="Device Name"  Width="120"/>
-                    <TextBlock x:Name="m_DeviceName" FontSize="16" Foreground="#FFC5BCBC" Text="minwinpc"  />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" >
-                <TextBlock FontSize="16" Foreground="Snow" Text="OS Version"  Width="120"/>
-                    <TextBlock x:Name="m_OsVersion" FontSize="16" Foreground="#FFC5BCBC" Text="10.0.10586.0"  />
-                </StackPanel>
-            </StackPanel>
-            <AppBarButton x:Name="appBarButton"   
+            <AppBarButton Grid.Column="2" x:Name="appBarButton"   
             HorizontalAlignment="Right"   
             Icon="Forward" Label=""   
             VerticalAlignment="Top"   
             Width="50" Height="44" Click="appBarButton_Click"   
             />
-        </StackPanel>
-        <Border Height="1" Width="300" Background="#FF8D7A7A" Margin="0,10" />
-        <ListView Height="220" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" >
-            <StackPanel Padding="5" Width="300">
-                <StackPanel>
-                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="24" 
+        </Grid>
+        <Border Grid.Row="2" Height="3" HorizontalAlignment="Stretch" Background="#FF8D7A7A" Margin="0,10,0,0" />
+        <Grid Grid.Row="3" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" FontSize="24" 
                             Foreground="#FFFDF8F8"
-                            Text="&#xE908;" VerticalAlignment="Center" Margin="10,0" >
-                        </TextBlock>
-                        <TextBlock x:Name="m_AdapterName" FontSize="16" Foreground="Snow" Text="-------" Width="250" />
-                    </StackPanel>
-                    <StackPanel BorderThickness="5"  >
-                        <TextBlock x:Name="m_AdapterMac" FontSize="16" Foreground="Snow" Text="-------" Margin="40,0,0,0" HorizontalAlignment="Left" Width="250" />
-                    </StackPanel>
-                </StackPanel>
-                <Border Height="1" Width="285" Background="#FF8D7A7A" Margin="0,10,0,0" VerticalAlignment="Center"/>
-            </StackPanel>
-            <StackPanel Padding="5">
-                <StackPanel PointerPressed="WifiStackPanel_PointerPressed">
-                    <StackPanel Orientation="Horizontal" Width="300">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="24" 
+                            Text="&#xE908;"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+            </TextBlock>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="m_AdapterName" FontSize="16" Foreground="Snow" Text="-------" HorizontalAlignment="Left" VerticalAlignment="Center" Width="auto" />
+
+            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="m_AdapterMac" FontSize="16" Foreground="Snow" Text="-------" HorizontalAlignment="Left" VerticalAlignment="Center" Width="auto" />
+
+
+        </Grid>
+        <Border Grid.Row="4" Height="3" HorizontalAlignment="Stretch" Background="#FF8D7A7A" Margin="0,10,0,0" VerticalAlignment="Center"/>
+        <Grid Grid.Row="5" PointerPressed="WifiStackPanel_PointerPressed" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Row="0" FontFamily="Segoe MDL2 Assets" FontSize="24" 
                             Foreground="#FFFDF8F8"
-                            Text="&#xE908;" VerticalAlignment="Center" Margin="10,0" >
-                        </TextBlock>
-                        <TextBlock x:Name="m_WifiNetworkName" FontSize="16" Foreground="Snow" Text="-------" Margin="0,0,0,0" HorizontalAlignment="Left" Width="250" />
-                    </StackPanel>
-                    <StackPanel BorderThickness="5">
-                        <TextBlock x:Name="m_WifiNetworkAddr" FontSize="16" Foreground="Snow" Text="-------" Margin="40,0,0,0" HorizontalAlignment="Left" Width="250" />
-                    </StackPanel>
-                </StackPanel>
-                <Border Height="1" Width="285" Background="#FF8D7A7A" Margin="0,10,0,0" VerticalAlignment="Center"/>
-            </StackPanel>
-            <StackPanel Padding="5" >
-                <StackPanel PointerPressed="BluetoothStackPanel_PointerPressed">
-                    <StackPanel Orientation="Horizontal" Width="300">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="24" 
+                            Text="&#xE908;" VerticalAlignment="Center" HorizontalAlignment="Center" >
+            </TextBlock>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="m_WifiNetworkName" FontSize="16" Foreground="Snow" Text="-------"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="m_WifiNetworkAddr" FontSize="16" Foreground="Snow" Text="-------"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+
+        </Grid>
+        <Border Grid.Row="6" Height="3" HorizontalAlignment="Stretch" Background="#FF8D7A7A" Margin="0,10,0,0" VerticalAlignment="Center"/>
+        <Grid Grid.Row="7" PointerPressed="BluetoothStackPanel_PointerPressed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+            
+
+            <TextBlock Grid.Row="0" FontFamily="Segoe MDL2 Assets" FontSize="24" 
                             Foreground="#FFFDF8F8"
-                            Text="&#xE702;" VerticalAlignment="Center" Margin="10,0" >
-                        </TextBlock>
-                        <TextBlock x:Name="m_BluetoothName" FontSize="16" Foreground="Snow" Text="-------" Margin="0,0,0,0" HorizontalAlignment="Left" Width="250" />
-                    </StackPanel>
-                    <StackPanel BorderThickness="5" Width="280" >
-                        <TextBlock x:Name="m_BluetoothMac" FontSize="16" Foreground="Snow" Text="-------" Margin="30,0,0,0" HorizontalAlignment="Left" Width="250" />
-                    </StackPanel>
-                </StackPanel>
-            </StackPanel>
-        </ListView>
-        <Border Height="1" Width="300" Background="#FF8D7A7A" Margin="0,5" />
-    </StackPanel>
+                            Text="&#xE702;" VerticalAlignment="Center" HorizontalAlignment="Center" >
+            </TextBlock>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="m_BluetoothName" FontSize="16" Foreground="Snow" Text="-------" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="m_BluetoothMac" FontSize="16" Foreground="Snow" Text="-------" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+
+        </Grid>
+        <Border Grid.Row="8" Height="3" HorizontalAlignment="Stretch" Background="#FF8D7A7A" Margin="0,10,0,0" />
+    </Grid>
 </Page>

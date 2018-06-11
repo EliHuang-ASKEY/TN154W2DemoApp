@@ -7,22 +7,30 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="InputTextBlock" TextWrapping="Wrap" Grid.Row="0"  HorizontalAlignment="Left" Text="Registers an event listener for gyrometer data and displays the X, Y and Z angular velocity values as they are reported." Width="270"/>
-                <AppBarButton x:Name="appBarButton"
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <AppBarButton x:Name="appBarButton"
                           Grid.Column="3"
                 HorizontalAlignment="Right"   
                 Icon="Forward" Label=""   
                 VerticalAlignment="Top"   
                 Width="50" Height="44"  Click="appBarButton_Click" />
+
+        <StackPanel  Grid.Row="0" Orientation="Horizontal">
+                <TextBlock x:Name="InputTextBlock" TextWrapping="Wrap" Grid.Row="0"  HorizontalAlignment="Left" Text="Registers an event listener for gyrometer data and displays the X, Y and Z angular velocity values as they are reported." Width="270"/>
+
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Row="1" Height="50">
+        <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0" Height="50">
                 <Button x:Name="ScenarioEnableButton" Content="Enable" Margin="0,0,10,0" Click="ScenarioEnable" FontSize="20"/>
                 <Button x:Name="ScenarioDisableButton" Content="Disable" Margin="0,0,10,0" Click="ScenarioDisable" FontSize="20"/>
             </StackPanel>
-            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1">
+        <Grid  Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" MinWidth="20"/>
                     <ColumnDefinition Width="Auto" MinWidth="60"/>
@@ -39,11 +47,11 @@
                 <TextBlock x:Name="ScenarioOutput_Y" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Right" Text="No data" FontSize="20"/>
                 <TextBlock x:Name="ScenarioOutput_Z" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right" Text="No data" FontSize="20"/>
             </Grid>
-            <StackPanel  Orientation="Vertical" HorizontalAlignment="Right" ManipulationMode="All" Width="320" Margin="0,50">
+        <StackPanel  Grid.Row="3"  Orientation="Vertical" HorizontalAlignment="Left" ManipulationMode="All" Margin="0,50">
                 <TextBlock x:Name="MessageBlockState" Text="State:" TextWrapping="Wrap"  HorizontalAlignment="Left"  Width="300" Height="20" FontSize="12"/>
                 <TextBlock x:Name="MessageBlock" Text="" TextWrapping="Wrap"  HorizontalAlignment="Left"  Width="300" Height="50" FontSize="20"/>
 
             </StackPanel>
-        </StackPanel>
+       
     </Grid>
 </Page>

@@ -25,7 +25,7 @@ namespace IOTCoreMasterApp.LocalApps
     {
         private DispatcherTimer timerProgress = new DispatcherTimer();
         private int MaxTime = 0;
-        private int _Time = 5;
+        private int _Time = 3;
 
         public AutoShutdown()
         {

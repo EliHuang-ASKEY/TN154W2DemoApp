@@ -21,14 +21,21 @@ using Windows.Devices.Gpio;
 //using AS7000HRM;
 using System.Diagnostics;
 using Windows.Devices.I2c;
+using Windows.Networking;
+using Windows.Networking.Sockets;
 
 namespace IOTCoreMasterApp.DataModel
 {
     public class AppDataModel : INotifyPropertyChanged
     {
+        public static bool _SensorHub = true;
         private bool isloaded = false;
         //private Class1 _AS700HRM = null;
         private GpioPin _GpioPin;
+
+        const string LISTEN_PORT = "2200";
+        const string hostName = "192.168.1.246";
+        IBuffer buffer;
 
         private string _currentStatusText = "Hallo";
         public string currentStatusText
@@ -180,8 +187,10 @@ namespace IOTCoreMasterApp.DataModel
 
         public async void LoadAppList()
         {
-            
-            
+            checkSensorHub();
+            await Task.Delay(800);
+
+
             if (isloaded == true) return;
             SetGPIO();
 
@@ -272,16 +281,35 @@ namespace IOTCoreMasterApp.DataModel
             litem.Name = "MediaPlayer";
             appList.Add(litem);
 
-            litem = new AppListItem();
-            litem.PackageFullName = "local:Accelerometer";
-            //StorageFile file;
-            clocklogo = new Uri("ms-appx:///Assets/accelerometer.png");
-            litem.ImageSrc = new BitmapImage();
-            litem.ImageSrc.UriSource = clocklogo;
-            //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
-            //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
-            litem.Name = "Accelerometer";
-            appList.Add(litem);
+            if (!_SensorHub)
+            {
+                Debug.WriteLine("_SensorHub == false");
+
+                litem = new AppListItem();
+                litem.PackageFullName = "local:Accelerometer";
+                //StorageFile file;
+                clocklogo = new Uri("ms-appx:///Assets/accelerometer.png");
+                litem.ImageSrc = new BitmapImage();
+                litem.ImageSrc.UriSource = clocklogo;
+                //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
+                //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
+                litem.Name = "Accelerometer";
+                appList.Add(litem);
+
+
+                litem = new AppListItem();
+                litem.PackageFullName = "local:SensorGyrometer";
+                //StorageFile file;
+                clocklogo = new Uri("ms-appx:///Assets/gyrometer.png");
+                litem.ImageSrc = new BitmapImage();
+                litem.ImageSrc.UriSource = clocklogo;
+                //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
+                //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
+                litem.Name = "SensorGyrometer";
+                appList.Add(litem);
+
+            }
+            
             
             /*
             litem = new AppListItem();
@@ -296,16 +324,6 @@ namespace IOTCoreMasterApp.DataModel
             appList.Add(litem);
             */
 
-            litem = new AppListItem();
-            litem.PackageFullName = "local:SensorGyrometer";
-            //StorageFile file;
-            clocklogo = new Uri("ms-appx:///Assets/gyrometer.png");
-            litem.ImageSrc = new BitmapImage();
-            litem.ImageSrc.UriSource = clocklogo;
-            //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
-            //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
-            litem.Name = "SensorGyrometer";
-            appList.Add(litem);
 
             litem = new AppListItem();
             litem.PackageFullName = "local:Vibrator";
@@ -328,6 +346,19 @@ namespace IOTCoreMasterApp.DataModel
             //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
             litem.Name = "NFC";
             appList.Add(litem);
+
+            //linda 0511 add
+            litem = new AppListItem();
+            litem.PackageFullName = "local:WifiConnectFromFile";
+            //StorageFile file;
+            clocklogo = new Uri("ms-appx:///Assets/wifi.png");
+            litem.ImageSrc = new BitmapImage();
+            litem.ImageSrc.UriSource = clocklogo;
+            //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
+            //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
+            litem.Name = "WifiConnectFromFile";
+            appList.Add(litem);
+            //
 
             litem = new AppListItem();
             litem.PackageFullName = "local:Location2";
@@ -352,6 +383,7 @@ namespace IOTCoreMasterApp.DataModel
             litem.Name = "Map";
             appList.Add(litem);
             */
+            
 
             litem = new AppListItem();
             litem.PackageFullName = "local:DeviceContrl";
@@ -374,6 +406,20 @@ namespace IOTCoreMasterApp.DataModel
             //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
             litem.Name = "Message";
             appList.Add(litem);
+
+            if (_AS7000)
+            {
+                litem = new AppListItem();
+                litem.PackageFullName = "local:AS7000HRM";
+                //StorageFile file;
+                clocklogo = new Uri("ms-appx:///Assets/AS7000HRM.png");
+                litem.ImageSrc = new BitmapImage();
+                litem.ImageSrc.UriSource = clocklogo;
+                //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
+                //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
+                litem.Name = "HRM";
+                appList.Add(litem);
+            }
 
 
             
@@ -414,7 +460,7 @@ namespace IOTCoreMasterApp.DataModel
                             item.Name != "IoTShellExperienceHost" &
                             item.Name != "OnScreenKeyboard" &
                             item.Name != "Connect" &
-                            (_AS7000 | item.Name != "AS7000HRM"))    
+                            (_SensorHub | item.Name != "BHI160Test"))    
                         {
                         
                             appList.Add(item);
@@ -438,6 +484,19 @@ namespace IOTCoreMasterApp.DataModel
             litem.Name = "Information";
             appList.Add(litem);
 
+            /*
+            litem = new AppListItem();
+            litem.PackageFullName = "local:autotest";
+            //StorageFile file;
+            clocklogo = new Uri("ms-appx:///Assets/AutoTest.png");
+            litem.ImageSrc = new BitmapImage();
+            litem.ImageSrc.UriSource = clocklogo;
+            //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
+            //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
+            litem.Name = "AutoTest";
+            appList.Add(litem);
+            */
+            
 
 
 
@@ -557,7 +616,7 @@ namespace IOTCoreMasterApp.DataModel
             }
         }
         private const byte PORT_EXPANDER_I2C_ADDRESS = 0x30;
-        private I2cDevice i2cPortExpander;
+        private I2cDevice i2cPortExpander, i2cPortSensorHub;
         private bool _AS7000 = true;
         
         private async void checkAS7000()
@@ -618,6 +677,54 @@ namespace IOTCoreMasterApp.DataModel
             }
             i2cPortExpander.Dispose();
         }
+
+
+        public async void checkSensorHub()
+        {
+
+
+            byte[] i2CReadBuffer;
+
+
+            var i2cSettings = new I2cConnectionSettings(0x28);
+            i2cSettings.BusSpeed = I2cBusSpeed.FastMode;
+            //var controller = await I2cController.GetDefaultAsync();
+            string deviceSelector = I2cDevice.GetDeviceSelector("I2C1");
+            var i2cDeviceControllers = await DeviceInformation.FindAllAsync(deviceSelector);
+            i2cPortSensorHub = await I2cDevice.FromIdAsync(i2cDeviceControllers[0].Id, i2cSettings);
+
+            Debug.WriteLine("i2cDeviceControllers = " + i2cDeviceControllers.Count);
+            if (i2cPortSensorHub == null) Debug.WriteLine("i2cPortSensorHub Null ");
+
+            else
+            {
+
+                try
+                {
+                    // initialize local copies of the IODIR, GPIO, and OLAT registers
+                    i2CReadBuffer = new byte[1];
+
+                    // read in each register value on register at a time (could do this all at once but
+                    // for example clarity purposes we do it this way)
+                    i2cPortSensorHub.WriteRead(new byte[] { 0x90 }, i2CReadBuffer);
+                    Debug.WriteLine("iodirRegister" + i2CReadBuffer[0]);
+ 
+
+                }
+                catch (Exception e)
+                {
+                    //ButtonStatusText.Text = "Failed to initialize I2C port expander: " + e.Message;
+                    Debug.WriteLine("Failed to initialize SensorHub I2C port expander");
+                    _SensorHub = false;
+                    Debug.WriteLine("_SensorHub should be false:"+ _SensorHub);
+                }
+
+            }
+            
+            i2cPortSensorHub.Dispose();
+        }
+
+
         /*
         private int checkAS7000HRM()
         {
@@ -633,5 +740,166 @@ namespace IOTCoreMasterApp.DataModel
 
         }
         */
+
+        public async void readResultFile(string TestCase)
+        {
+            Debug.WriteLine("readResultFileStart!");
+            string testItem = TestCase;
+            Debug.WriteLine("TestCase" + TestCase);
+            switch (TestCase)
+            {
+                case "TestVibrator":
+                    testItem += ".txt";
+                    break;
+                case "TestAccelerometer":
+                    testItem += ".txt";
+                    break;
+                case "TestGyrometer":
+                    testItem += ".txt";
+                    break;
+                case "TestAS7000HRM":
+                    testItem += ".txt";
+                    break;
+
+            }
+
+
+
+            StorageFolder storageFolder;
+            StorageFile sampleFile;
+
+
+
+
+            if (testItem == "TestHeartRate.txt")
+            {
+                storageFolder = KnownFolders.DocumentsLibrary;
+                var Documentfile = await storageFolder.TryGetItemAsync(testItem);
+                if (Documentfile == null)
+                {
+                    return;
+                }
+                else
+                {
+                    sampleFile = await storageFolder.GetFileAsync(testItem);
+                }
+            }
+            else
+            {
+                var file = await KnownFolders.VideosLibrary.TryGetItemAsync(testItem);
+
+
+                if (file != null)
+                {
+                    storageFolder = KnownFolders.VideosLibrary;
+                    sampleFile = await storageFolder.GetFileAsync(testItem);
+
+                }
+                else return;
+            }
+
+
+
+
+
+
+
+
+            Debug.WriteLine("StartTCPSend:" + testItem + "\n");
+
+
+
+            if (sampleFile != null)
+            {
+                using (IRandomAccessStream stream = await sampleFile.OpenReadAsync())
+                {
+
+                    using (DataReader reader = new DataReader(stream.GetInputStreamAt(0UL)))
+                    {
+                        uint len = (uint)stream.Size;
+                        // 載入資料
+                        await reader.LoadAsync(len);
+                        buffer = reader.ReadBuffer(len);
+                        // 暫存在Tag屬性中，稍後用到
+                        //this.Tag = buffer;
+                    }
+                }
+            }
+
+            //buffer = this.Tag as IBuffer;
+            sendFileTCP(buffer, testItem);
+
+
+        }
+        private async void sendFileTCP(IBuffer buffer, string TestCase)
+        {
+            Debug.WriteLine("Entry_sendFileTCP!");
+            using (StreamSocket socket = new StreamSocket())
+            {
+                try
+                {
+                    // 發起連線
+                    await socket.ConnectAsync(new HostName(hostName), LISTEN_PORT);
+                    Debug.WriteLine("connect status:" + socket.Information);
+                    // 準備傳送資料
+                    using (DataWriter writer = new DataWriter(socket.OutputStream))
+                    {
+                        // 首先寫入圖形資料
+                        uint len = buffer.Length;
+                        writer.WriteUInt32(len); //長度
+                        writer.WriteBuffer(buffer);
+                        // 接著寫入文字
+
+                        len = writer.MeasureString(TestCase);
+                        writer.WriteUInt32(len); //長度
+                        writer.WriteString(TestCase);
+
+                        // 傳送資料到流
+                        await writer.StoreAsync();
+                        Debug.WriteLine("CloseTCPSend\n");
+                    }
+
+                    socket.Dispose();
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(TestCase + ": TCP " + ex.Message);
+                }
+            }
+            /*
+            var file = await ApplicationData.Current.LocalFolder.TryGetItemAsync(TestCase);
+
+            if (file != null)
+            {
+                await file.DeleteAsync();
+                Debug.WriteLine("Delete file :" + TestCase + "\n");
+                return;
+            }
+            */
+            if (TestCase == "TestHeartRate.txt")
+            {
+                StorageFolder storageFolder = KnownFolders.DocumentsLibrary;
+                var Documnentfile = await storageFolder.TryGetItemAsync(TestCase);
+
+                if (Documnentfile != null)
+                {
+                    try
+                    {
+                        StorageFile sampleFile = await storageFolder.GetFileAsync(TestCase);
+                        await sampleFile.DeleteAsync();
+                        Debug.WriteLine("file :" + TestCase + "\nDelete file successful");
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Can not find file :" + TestCase + "\n TO Delete fail");
+                        return;
+                    }
+                }
+            }
+
+
+        }
     }
 }

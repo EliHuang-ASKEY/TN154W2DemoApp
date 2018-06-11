@@ -30,7 +30,7 @@ namespace IOTCoreMasterApp.LocalApps
     /// 
     class WifiAvailableAP : INotifyPropertyChanged
     {
-        public String WiFiImage { get; set; } = "";
+        public String WiFiImage { get; set; } = "";   
 
         public WiFiAvailableNetwork network;
         public WifiAvailableAP(WiFiAvailableNetwork availableNetwork)
@@ -120,6 +120,7 @@ namespace IOTCoreMasterApp.LocalApps
         private WiFiAdapter m_WifiAdapter;
         private ConnectInfoFlyout m_ConnectInfo;
         private ObservableCollection<WifiAvailableAP> m_WifiApCollection;
+        public static string flag = "";
 
         public WifiScanPage()
         {
@@ -235,7 +236,12 @@ namespace IOTCoreMasterApp.LocalApps
                 this.CloseProgressRing();
 
                 if (result.ConnectionStatus == WiFiConnectionStatus.Success)
-                    this.Frame.GoBack();
+                {
+                    flag = "on";
+                   this.Frame.GoBack();
+
+                }
+                   
             }
             else
             {
@@ -271,6 +277,7 @@ namespace IOTCoreMasterApp.LocalApps
 
                 if (result.ConnectionStatus == WiFiConnectionStatus.Success)
                     this.Frame.GoBack();
+                   
                 //throw new NotImplementedException();
             }
             catch (Exception ex){ Debug.WriteLine(ex.ToString()); }

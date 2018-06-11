@@ -70,6 +70,7 @@
     <iot:Capability Name="systemManagement" />
     <iot:Capability Name="lowLevelDevices" />
     <rescap:Capability Name="packageQuery" />
+    <rescap:Capability Name="broadFileSystemAccess" />
     <DeviceCapability Name="proximity" />
     <DeviceCapability Name="webcam" />
     <DeviceCapability Name="bluetooth" />

@@ -1,0 +1,138 @@
+﻿<Page
+    x:Class="IOTCoreMasterApp.LocalApps.autotest"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IOTCoreMasterApp.LocalApps"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        
+
+        <Grid VerticalAlignment="Top">
+            <SplitView Name="MySplit" Height="220" DisplayMode="Inline">
+                <SplitView.Pane>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"  />
+                            <RowDefinition Height="120"  />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="1" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+
+                            </Grid.ColumnDefinitions>
+
+                            <Button  Padding="15" x:Name="btnStart" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Stretch" Content="Start"  Margin="10, 10, 10, 10" Click="btnStart_Click" />
+                            <Button  Padding="15" x:Name="btnStop" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Content="Stop"  Margin="10, 10, 10, 10" Click="btnStop_Click"/>
+
+                        </Grid>
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock TextWrapping="Wrap" Grid.Column="0"  HorizontalAlignment="Center" Text="Count:" FontSize="20" VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="combox" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Center" SelectedIndex="0" SelectionChanged="combox_SelectionChanged">
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                                <ComboBoxItem >1</ComboBoxItem>
+                                <ComboBoxItem>2</ComboBoxItem>
+                                <ComboBoxItem>3</ComboBoxItem>
+                                <ComboBoxItem>5</ComboBoxItem>
+                                <ComboBoxItem>10</ComboBoxItem>
+                                <ComboBoxItem>20</ComboBoxItem>
+                                <ComboBoxItem>30</ComboBoxItem>
+                            </ComboBox>
+
+                            <TextBlock TextWrapping="Wrap" Grid.Column="2"  HorizontalAlignment="Center" Text="Round:" FontSize="20" VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="combox2" Grid.Column="3"  VerticalContentAlignment="Center" HorizontalAlignment="Center" SelectedIndex="0" SelectionChanged="combox2_SelectionChanged">
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                                <ComboBoxItem >1</ComboBoxItem>
+                                <ComboBoxItem>2</ComboBoxItem>
+                                <ComboBoxItem>3</ComboBoxItem>
+                                <ComboBoxItem>5</ComboBoxItem>
+                                <ComboBoxItem>10</ComboBoxItem>
+                                <ComboBoxItem>20</ComboBoxItem>
+                                <ComboBoxItem>30</ComboBoxItem>
+                            </ComboBox>
+
+                        </Grid>
+
+                    </Grid>
+
+                </SplitView.Pane>
+
+            </SplitView>
+
+        </Grid>
+
+        <AppBarButton x:Name="appBarButton"
+                          Grid.Column="3"
+                HorizontalAlignment="Right"   
+                Icon="Forward" Label=""   
+                VerticalAlignment="Top"   
+                Width="50" Height="44" Click="appBarButton_Click" />
+
+
+
+        <CaptureElement x:Name="previewElement" Stretch="Uniform" Visibility="Collapsed"  />
+
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" >
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="0,0"/>
+                        <Setter Property="MinWidth" Value="30"/>
+                        <Setter Property="MinHeight" Value="40"/>
+                        <Setter Property="Foreground" Value="White"/>
+
+                        <Setter Property="BorderBrush" Value="White"/>
+                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+
+                    </Style>
+                </StackPanel.Resources>
+
+
+                <Button Name="PhotoButton" Click="PhotoButton_Click"   Width="60" Height="60" >
+                    <Viewbox MaxHeight="60" MaxWidth="40">
+                        <SymbolIcon Symbol="Camera"/>
+                    </Viewbox>
+                </Button>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+
+                <Image x:Name="captureImage" Width="60" Height="60" Visibility="Visible" Margin="70,10,0,10" />
+
+            </StackPanel>
+
+
+        <Popup x:Name="CompleteMessage" VerticalOffset="130" IsOpen="False" >
+
+            <StackPanel x:Name="PopupResetSPanel" Background="Black" Visibility="Visible" BorderBrush="White" BorderThickness="1" Tapped="SPTap" Width="290" Height="70" Margin="15,0,0,0"  >
+                <TextBlock x:Name="resetstate" Text="Test Completed." FontSize="30" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"  Margin="0,15,0,0" Height="auto" Width="auto"/>
+            </StackPanel>
+
+        </Popup>
+
+
+    </Grid>
+</Page>

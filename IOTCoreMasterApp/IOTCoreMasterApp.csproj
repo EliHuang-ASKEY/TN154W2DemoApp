@@ -17,8 +17,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>IOTCoreMasterApp_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>3792D35CBD5CD5866E6D08B10871DD0639ECC96C</PackageCertificateThumbprint>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <PackageCertificateThumbprint>13162BBA593DE3AB3F21BF99462F3DAB0EE81AF2</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>arm</AppxBundlePlatforms>
     <RuntimeIdentifiers>win10-arm;win10-arm-aot;win10-x86;win10-x86-aot;win10-x64;win10-x64-aot</RuntimeIdentifiers>
@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="DataModel\AppListItem.cs" />
     <Compile Include="DataModel\AppSetting.cs" />
+    <Compile Include="DataModel\TestLog.cs" />
     <Compile Include="DataModel\DataModel.cs" />
     <Compile Include="LocalApps\about.xaml.cs">
       <DependentUpon>about.xaml</DependentUpon>
@@ -112,14 +113,23 @@
     <Compile Include="LocalApps\Accelerometer.xaml.cs">
       <DependentUpon>Accelerometer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LocalApps\Accelerometer2.xaml.cs">
+      <DependentUpon>Accelerometer2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LocalApps\AppClock.xaml.cs">
       <DependentUpon>AppClock.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LocalApps\AS7000HRM.xaml.cs">
+      <DependentUpon>AS7000HRM.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalApps\AudioRecord.xaml.cs">
       <DependentUpon>AudioRecord.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalApps\AutoShutdown.xaml.cs">
       <DependentUpon>AutoShutdown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LocalApps\autotest.xaml.cs">
+      <DependentUpon>autotest.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalApps\BluetoothDevice.xaml.cs">
       <DependentUpon>BluetoothDevice.xaml</DependentUpon>
@@ -156,6 +166,9 @@
     </Compile>
     <Compile Include="LocalApps\NFCTest.xaml.cs">
       <DependentUpon>NFCTest.xaml</DependentUpon>
+    </Compile>    
+    <Compile Include="LocalApps\WifiConnectFromFile.xaml.cs">
+      <DependentUpon>WifiConnectFromFile.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalApps\SensorCompass.xaml.cs">
       <DependentUpon>SensorCompass.xaml</DependentUpon>
@@ -191,7 +204,10 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\AS7000HRM.png" />
+    <Content Include="Assets\AutoTest.png" />
     <Content Include="Assets\Charging.png" />
+    <Content Include="Assets\e-label_20180330.bmp" />
     <Content Include="Assets\flashlight.png" />
     <Content Include="Assets\Map.png" />
     <Content Include="factory_ini_set_v2.exe" />
@@ -254,7 +270,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="LocalApps\Accelerometer2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LocalApps\AppClock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LocalApps\AS7000HRM.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -263,6 +287,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LocalApps\AutoShutdown.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LocalApps\autotest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -313,6 +341,10 @@
     <Page Include="LocalApps\NFCTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>   
+    <Page Include="LocalApps\WifiConnectFromFile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LocalApps\SensorCompass.xaml">
       <SubType>Designer</SubType>
@@ -351,8 +383,11 @@
     <SDKReference Include="Microsoft.VCLibs, Version=14.0">
       <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
     </SDKReference>
+    <SDKReference Include="WindowsIoT, Version=10.0.14393.0">
+      <Name>Windows IoT Extensions for the UWP %28WindowsIoT, Version=10.0.14393.0%29</Name>
+    </SDKReference>
     <SDKReference Include="WindowsIoT, Version=10.0.15063.0">
-      <Name>Windows IoT Extensions for the UWP</Name>
+      <Name>Windows IoT Extensions for the UWP %28WindowsIoT, Version=10.0.15063.0%29</Name>
     </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.15063.0">
       <Name>Windows Mobile Extensions for the UWP</Name>

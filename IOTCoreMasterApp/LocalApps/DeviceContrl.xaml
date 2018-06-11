@@ -8,19 +8,15 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
-        <StackPanel Orientation="Vertical">
-            <StackPanel Height="80">
-            <AppBarButton x:Name="appBarButton"
-                          Grid.Column="3"
+
+        <AppBarButton x:Name="appBarButton"
+                          
                 HorizontalAlignment="Right"   
                 Icon="Forward" Label=""   
                 VerticalAlignment="Top"   
                 Width="50" Height="44"  Click="appBarButton_Click" />
-            </StackPanel>
-            <TextBlock x:Name="sMsg" Grid.Row="0" Margin="30,0,30,10" FontSize="12" Height="80" />
-            <StackPanel  >
-                <Slider  x:Name="BrignessSlider" Header="Brigness" Margin="30,10,30,10"  ValueChanged="slider_Brightness_ValueChanged" TickFrequency="1" FontSize="36"/>
-            </StackPanel>
-        </StackPanel>
+
+        <Slider  x:Name="BrignessSlider" Header="Brigness" Margin="30,100,50,-100"  ValueChanged="slider_Brightness_ValueChanged" TickFrequency="1" FontSize="36"/>
+
     </Grid>
 </Page>

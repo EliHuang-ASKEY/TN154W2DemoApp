@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="320" Width="320">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -23,7 +23,7 @@
         <!--      <TextBlock Grid.Row="0" x:Name="pageTitle" Text="Web Camera Sample" Style="{StaticResource HeaderTextBlockStyle}" 
                      IsHitTestVisible="false" TextWrapping="NoWrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0.667" Width="298"/>
 -->
-        <StackPanel Grid.Row="0" x:Name="ContentRoot" HorizontalAlignment="Right" VerticalAlignment="Top"  Width="320">
+        <StackPanel Grid.Row="0" x:Name="ContentRoot" HorizontalAlignment="Right" VerticalAlignment="Top" >
             
             
                 <AppBarButton x:Name="appBarButton"   

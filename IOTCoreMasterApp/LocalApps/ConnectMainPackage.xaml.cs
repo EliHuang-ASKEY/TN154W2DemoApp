@@ -21,6 +21,13 @@ using Windows.System;
 using Windows.Networking;
 using Windows.Networking.Connectivity;
 using IOTCoreMasterApp.Utils;
+using Windows.Devices.WiFi;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Net.NetworkInformation;
+using Windows.Devices.Radios;
+using IOTCoreMasterApp.DataModel;
+
 
 // 空白頁項目範本已記錄在 http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -34,6 +41,13 @@ namespace IOTCoreMasterApp.LocalApps
     {
         private DispatcherTimer m_DispatcherTimer = new DispatcherTimer();
         private List<AdapterInfo> m_AdapterInfo;
+        public static string flag = "";
+        private WiFiAdapter firstAdapter;
+        private string savedProfileName = null, temp="",message="";
+        private DataModel.TestLog log;
+
+
+
         public ConnectMainPackage()
         {
             this.InitializeComponent();
@@ -42,15 +56,22 @@ namespace IOTCoreMasterApp.LocalApps
             m_DispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10000);
 
             m_AdapterInfo = AdaptersHelper.GetAdapters();
+
+
         }
-        void DispatcherTimerTick(object sender, object e)
+
+        async void DispatcherTimerTick(object sender, object e)
         {
             this.InitializeComponentValue();
+            await Task.Delay(2000);
+            WifiScanPage.flag = "";
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            //wifi_profile();
             this.InitializeComponentValue();
             m_DispatcherTimer.Start();
+            log = new TestLog("Wifi_log.txt");
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -95,7 +116,7 @@ namespace IOTCoreMasterApp.LocalApps
                 }
             }
 
-            return "--------";
+            return "-------";
         }
         public static string GetCurrentIpv4Address()
         {
@@ -116,6 +137,7 @@ namespace IOTCoreMasterApp.LocalApps
                         && hn.IPInformation.NetworkAdapter.NetworkAdapterId == icp.NetworkAdapter.NetworkAdapterId
                         && hn.Type == HostNameType.Ipv4)
                     {
+                        flag = "ok";
                         return hn.CanonicalName;
                     }
                 }
@@ -151,9 +173,61 @@ namespace IOTCoreMasterApp.LocalApps
             }
             return "-------";
         }
-        private void WifiStackPanel_PointerPressed(object sender, PointerRoutedEventArgs e)
+
+        private  void WifiStackPanel_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(WifiScanPage));
+            temp = m_WifiNetworkName.Text;
+
+            if(Setting.wifi_switch_flag == "on")
+            {
+                //message += "temp=" + temp+"\r\n";
+                //log.WriteText("temp=" + temp);
+                //await Task.Delay(2000);
+                //message += "flag=" + flag + "\r\n";
+                //log.WriteText("flag=" + flag);
+                //await Task.Delay(2000);
+                
+
+                if (temp == "-------" && WifiScanPage.flag == "on")
+                {
+
+                    if (m_WifiNetworkName.Text == "-------" || m_WifiNetworkAddr.Text == "-------")
+                    {
+
+                    }
+
+                }
+                else
+                {
+                    if (flag == "ok")
+                    {
+
+                        if (m_WifiNetworkName.Text == "-------" || m_WifiNetworkAddr.Text == "-------")
+                        {
+
+                        }
+                        else
+                        {
+                            this.Frame.Navigate(typeof(WifiScanPage));
+                        }
+
+                    }
+                    else
+                    {
+                        this.Frame.Navigate(typeof(WifiScanPage));
+                    }
+                }
+
+
+            }
+            else
+            {
+                this.Frame.Navigate(typeof(WifiScanPage));
+            }
+
+            //log.WriteText(message);
+        
+
         }
         private void BluetoothStackPanel_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
@@ -190,10 +264,62 @@ namespace IOTCoreMasterApp.LocalApps
         private void appBarButton_Click(object sender, RoutedEventArgs e)
         {
             //this.Frame.Navigate(typeof(MainPage));
+            
             if (this.Frame.CanGoBack)
             {
+                WifiScanPage.flag = "";
                 this.Frame.GoBack();
             }
+            
         }
+        /*
+        private void m_WifiNetworkName_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            message += "temp in change=" + temp + "\r\n";
+            //log.WriteText("temp in change=" + temp);
+            //await Task.Delay(2000);
+            message += "flag in change=" + flag + "\r\n";
+            //log.WriteText("flag in change=" + flag);
+            //await Task.Delay(2000);
+
+            
+            if (temp != "-------" && temp!="")
+            {
+                flag = "ok";
+            }
+            else if(temp == "")
+            {
+
+            }
+            
+
+            
+        }
+
+        private async void wifi_profile()
+        {
+
+            var result = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(WiFiAdapter.GetDeviceSelector());
+            if (result.Count >= 1)
+            {
+                firstAdapter = await WiFiAdapter.FromIdAsync(result[0].Id);
+            }
+
+
+            if (firstAdapter.NetworkAdapter.GetConnectedProfileAsync() != null)
+            {
+                var connectedProfile = await firstAdapter.NetworkAdapter.GetConnectedProfileAsync();
+                if (connectedProfile != null && !connectedProfile.ProfileName.Equals(savedProfileName))
+                {
+                    //WriteText("connectedProfile != null \r\n");
+                    savedProfileName = connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid();
+                    await Task.Delay(2000);
+                }
+
+                //WriteText(" savedProfileName:" + savedProfileName + "\r\n");
+
+            }
+        }
+        */
     }
 }

@@ -8,8 +8,8 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="320" Height="320">
-        <TextBlock x:Name="state" Text="The Remaining battery Percent was &lt; 8%." FontSize="24" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-70,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
-        <TextBlock x:Name="state2" Text="Device will be shutdown.." FontSize="24" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,50,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+        <TextBlock x:Name="state" Text="Low Battery now." FontSize="24" Foreground="Snow"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-70,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
+        <TextBlock x:Name="state2" Text="Device will be shutdown.." FontSize="24" Foreground="Snow"  VerticalAlignment="Top" HorizontalAlignment="Center" Margin="17,169,16,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
 
     </Grid>
 </Page>
