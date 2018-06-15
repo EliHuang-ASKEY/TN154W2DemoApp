@@ -30,22 +30,27 @@ namespace IOTCoreMasterApp.LocalApps
     public sealed partial class AS7000HRM : Page
     {
 
-        // For PCA6800 ES
-        //const int AS7000_GPIO_POWER_PIN =    24;         // ES
-        //const int AS7000_GPIO_INT_PIN =      96;         // ES
-        //const string AS7000_I2C_PORT =        "I2C2";     // ES
-        //const string BMC156_I2C_PORT =        "I2C1";     // ES
+        // Chose Acc value resource
+        const int Acc_resource = 2;   //0 = Dummy , 1 = BMC156 , 2 = BHI160
+
 
         // For PCA6800 EV
-        const int AS7000_GPIO_POWER_PIN = 8;       // EV
-        const int AS7000_GPIO_INT_PIN = 9;         // EV
-        const string AS7000_I2C_PORT = "I2C6";      // EV
-        const string BMC156_I2C_PORT = "I2C1";      // EV
+        const int AS7000_GPIO_POWER_PIN = 8;
+        const int AS7000_GPIO_INT_PIN = 9;
+        const string AS7000_I2C_PORT = "I2C6";
+        const int AS7000_I2C_ADDRESS = 0x30;
         const int AS7000_GPIO_LEDEN_PIN = 93;      // EV3 New
 
-        const int AS7000_I2C_ADDRESS = 0x30;
+        //For BMC156
+        const string BMC156_I2C_PORT = "I2C1";
         const int BMC156_I2C_ADDRESS = 0x10;
 
+        //For BHI160
+        const string BHI160_I2C_PORT = "I2C1";
+        const int BHI160_I2C_ADDRESS = 0x28;
+
+
+        //For AS7000
         const int AS7000_REG_PROTOCOL_VERSION_MAJOR = 0x00;
         const int AS7000_REG_PROTOCOL_VERSION_MINOR = 0x01;
         const byte AS7000_REG_SW_VERSION_MAJOR = 0x02;
@@ -81,6 +86,7 @@ namespace IOTCoreMasterApp.LocalApps
         const byte AS7000_APPID_LOADER = 0x01;
         const byte AS7000_APPID_HRM = 0x02;
 
+        //For BMC156
         const byte BMC156_REG_CHIP_ID = 0x00;
         const byte BMC156_REG_FIFO_STATUS = 0x0E;
         const byte BMC156_REG_RANGE_SEL = 0x0F;
@@ -114,10 +120,28 @@ namespace IOTCoreMasterApp.LocalApps
         const byte BMC156_FIFO_CONFIG_1_DATA_SELECT_YONLY = 0x10;
         const byte BMC156_FIFO_CONFIG_1_DATA_SELECT_ZONLY = 0x11;
 
+        //For BHI160
+
+
+        const byte BHI160_REG_CHIP_ID = 0x90;
+
+        const byte BHI160_REG_PARAMETER_WRITE_BUFFER = 0x5C;
+        const byte BHY160_REG_PARAMETER_PAGE_SELECT = 0x54;
+        const byte BHI160_REG_PARAMETER_REQUEST = 0x64;
+        const byte BHI160_REG_PARAMETER_ACKNOWLEDGE = 0x3A;
+
+        const byte BHI160_REG_BYTES_REMAINING_LSB = 0x38;
+        const byte BHI160_REG_BYTES_REMAINING_MSB = 0x39;
+
+        const byte BHI160_REG_BUFFER_FIFO = 0x00;    // 0x00 ~ 0x31 total 50 byte
+
+        const byte BHI160_PARAMETER_PAGE_SELECT_SENSORS = 0x03;
+        const byte BHI160_PARAMETER_REQUEST_WRITE_ACCELEROMETER = 0xE1;
+
         GpioPin PwrPin = null;
         GpioPin IntPin = null;
         GpioPin LedEnPin = null;
-        I2cDevice HrmSensor = null;
+        I2cDevice HrmSensor = null, BMCSensor = null, BHISensor = null;
 
         bool flgStart = false;
 
@@ -199,6 +223,31 @@ namespace IOTCoreMasterApp.LocalApps
             return false;
         }
 
+        async Task<bool> BMC156_I2C_Init()
+        {
+            var i2cSettings = new I2cConnectionSettings(BMC156_I2C_ADDRESS); // connect to default address; 
+            i2cSettings.BusSpeed = I2cBusSpeed.FastMode;
+            //string deviceSelector = I2cDevice.GetDeviceSelector("I2C5");
+            string deviceSelector = I2cDevice.GetDeviceSelector(BMC156_I2C_PORT);
+            var i2cDeviceControllers = await DeviceInformation.FindAllAsync(deviceSelector);
+            Debug.WriteLine("i2cDeviceControllers:" + i2cDeviceControllers);
+            BMCSensor = await I2cDevice.FromIdAsync(i2cDeviceControllers[0].Id, i2cSettings);
+            Debug.WriteLine("BMCSensor:" + BMCSensor);
+            return false;
+        }
+
+        async Task<bool> BHI160_I2C_Init()
+        {
+            var i2cSettings = new I2cConnectionSettings(BHI160_I2C_ADDRESS); // connect to default address; 
+            i2cSettings.BusSpeed = I2cBusSpeed.FastMode;
+            //string deviceSelector = I2cDevice.GetDeviceSelector("I2C5");
+            string deviceSelector = I2cDevice.GetDeviceSelector(BHI160_I2C_PORT);
+            var i2cDeviceControllers = await DeviceInformation.FindAllAsync(deviceSelector);
+            Debug.WriteLine("i2cDeviceControllers:" + i2cDeviceControllers);
+            BHISensor = await I2cDevice.FromIdAsync(i2cDeviceControllers[0].Id, i2cSettings);
+            Debug.WriteLine("BHISensor:" + BHISensor);
+            return false;
+        }
 
         int AS7000_INT_ON()
         {
@@ -212,15 +261,6 @@ namespace IOTCoreMasterApp.LocalApps
 
             return 0;
         }
-
-        /*
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-        {
-
-
-
-        }
-        */
 
 
         // AS7000_REG_HRM_STATUS - Reg Value
@@ -261,9 +301,9 @@ namespace IOTCoreMasterApp.LocalApps
 
         bool blockI2C = false;
 
-        private async void IntPin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
+        unsafe private void IntPin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
         {
-            // Using dummy Acc Data
+
             if (args.Edge == GpioPinEdge.FallingEdge)
             {
                 if (blockI2C)
@@ -278,45 +318,214 @@ namespace IOTCoreMasterApp.LocalApps
                 }
                 blockI2C = true;
 
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    Debug.Write("1");
+                    byte hrmStatus;
+                    byte hrmHeartRate;
+                    byte hrmSqi;
+                    byte hrmSync;
+
+                    //ACC_BMC156
+                    byte AccSamples;
+                    byte[] BMC156bAccData = new byte[120]; // 20*6
+
+                    //ACC_BHI160
+                    byte[] bRegDataSize = new byte[2];
+                    UInt16 wRegDataSize;
+                    int wRegDataSize_quo;
+                    int wRegDataSize_Rem;
+                    byte[] bFifoData = new byte[500];
+                    UInt16 wFifoDataSize;
+                    byte[] bTemp = new byte[50];
+                    byte[] BHI160bAccData = new byte[120];
+                    int iAccDataIndex;
+                    int i;
+
+
+                    Debug.WriteLine("1");
                     // Host one-second time - 0=not-determined
                     I2C_WriteRegData(HrmSensor, AS7000_REG_HOST_ONE_SECOND_TIME_MSB, 0x00);
                     Task.Delay(1);
                     I2C_WriteRegData(HrmSensor, AS7000_REG_HOST_ONE_SECOND_TIME_LSB, 0x00);
                     Task.Delay(1);
 
-                    Debug.Write("2");
-
-                    for (int i = 0; i < 10; i++)
+                    if (Acc_resource == 0)
                     {
+                        //Acc Samples as 20
+                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_SAMPLES, 20);
 
-                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_INDEX, (byte)(i + 1));
-                        Task.Delay(1);
-                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_X_MSB, 0x00);
-                        Task.Delay(1);
-                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_X_LSB, (byte)(0x07 + i));
-                        Task.Delay(1);
-                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Y_MSB, 0x00);
-                        Task.Delay(1);
-                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Y_LSB, (byte)(0x11 + i));
-                        Task.Delay(1);
-                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Z_MSB, 0x07);
-                        Task.Delay(1);
-                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Z_LSB, 0xD0 + 1);
-                        Task.Delay(1);
+                        //Write Dummy Acc Data to AS7000
+                        for (i = 0; i < 20; i++)
+                        {
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_INDEX, (byte)(i + 1));
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_X_MSB, 0x00);
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_X_LSB, (byte)(0x07 + i));
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Y_MSB, 0x00);
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Y_LSB, (byte)(0x11 + i));
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Z_MSB, 0x07);
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Z_LSB, 0xD0 + 1);
+                            Task.Delay(1);
+                        }
+                    }
+                    else if (Acc_resource == 1)
+                    {
+                        //get BMC156 FIFO 
+                        I2C_ReadRegData(BMCSensor, BMC156_REG_FIFO_STATUS, &AccSamples);
+
+                        //read BMC156 Acc data
+                        I2C_ReadRegMultiData(BMCSensor, BMC156_REG_FIFO_DATA, BMC156bAccData, 120);
+
+                        Debug.WriteLine("BMC156bAccData:" + BitConverter.ToString(BMC156bAccData));
+                        //clear/reset Acc BMC156 fifo
+                        I2C_WriteRegData(BMCSensor, BMC156_REG_FIFO_CONFIG_1, (BMC156_FIFO_CONFIG_1_MODE_FIFO | BMC156_FIFO_CONFIG_1_DATA_SELECT_XYZ));
+
+                        //Acc Samples as 20
+                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_SAMPLES, 20);
+
+                        //Write Acc BMC156 Data to AS7000
+                        for (i = 0; i < 20; i++)
+                        {
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_INDEX, (byte)(i + 1));
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_X_MSB, BMC156bAccData[1 + (i * 6)]);
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_X_LSB, (byte)(BMC156bAccData[0 + (i * 6)] & 0xF0));
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Y_MSB, BMC156bAccData[3 + (i * 6)]);
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Y_LSB, (byte)(BMC156bAccData[2 + (i * 6)] & 0xF0));
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Z_MSB, BMC156bAccData[5 + (i * 6)]);
+                            Task.Delay(1);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Z_LSB, (byte)(BMC156bAccData[4 + (i * 6)] & 0xF0));
+                            Task.Delay(1);
+
+                        }
+                    }
+                    else if (Acc_resource == 2)
+                    {
+                        I2C_ReadRegMultiData(BHISensor, BHI160_REG_BYTES_REMAINING_LSB, bRegDataSize, 2);
+                        //TraceLog("bRegDataSize[0] = 0x%02x \r\n", bRegDataSize[0]);
+                        //TraceLog("bRegDataSize[1] = 0x%02x \r\n", bRegDataSize[1]);
+                        wRegDataSize = (UInt16)((bRegDataSize[1] << 8) | bRegDataSize[0]);
+                        Debug.WriteLine("wRegDataSize:" + wRegDataSize);
+                        //TraceLog(L"wRegDataSize = %d \r\n", wRegDataSize);
+                        wRegDataSize_quo = (int)wRegDataSize / 50;
+                        Debug.WriteLine("wRegDataSize_quo:" + wRegDataSize_quo);
+                        wRegDataSize_Rem = (int)wRegDataSize % 50;
+                        Debug.WriteLine("wRegDataSize_Rem:" + wRegDataSize_Rem);
+                        //TraceLog(L"wRegDataSize_quo = %d wRegDataSize_Rem = %d \r\n", wRegDataSize_quo, wRegDataSize_Rem);
+
+                        if (wRegDataSize <= 500)
+                        {
+                            wFifoDataSize = wRegDataSize;
+                        }
+                        else
+                        {
+                            wFifoDataSize = 500;
+                        }
+
+                        Array.Clear(bFifoData, 0, 500);
+
+                        Debug.WriteLine("wFifoDataSize:" + wFifoDataSize);
+
+                        for (i = 0; i < wRegDataSize_quo; i++)
+                        {
+                            if (i < 10)
+                            {
+
+                                I2C_ReadRegMultiData_3(BHISensor, BHI160_REG_BUFFER_FIFO, bFifoData, 50, i);
+                            }
+                            else
+                            {
+                                I2C_ReadRegMultiData(BHISensor, BHI160_REG_BUFFER_FIFO, bTemp, 50);
+                            }
+                        }
+                        if (wRegDataSize_Rem > 0)
+                        {
+                            if (i < 10)
+                            {
+
+                                I2C_ReadRegMultiData_3(BHISensor, BHI160_REG_BUFFER_FIFO, bFifoData, wRegDataSize_Rem, i);
+                            }
+                            else
+                            {
+                                I2C_ReadRegMultiData(BHISensor, BHI160_REG_BUFFER_FIFO, bTemp, wRegDataSize_Rem);
+                            }
+                        }
+                        //TraceLog(L"wFifoDataSize = %d \r\n", wFifoDataSize);
+                        Debug.WriteLine("bFifoData:" + BitConverter.ToString(bFifoData));
+                        // Parser Fifo Data
+                        iAccDataIndex = 0;
+                        Array.Clear(BHI160bAccData, 0, 120);
+                        for (i = 0; i < (wFifoDataSize - 10); i++)
+                        {
+                            //Debug.WriteLine("bFifoData[i]:"+bFifoData[i]);
+                            //Debug.WriteLine("bFifoData[i + 3]:"+ bFifoData[i+3]);
+                            if (bFifoData[i] == 0xf6 && bFifoData[i + 3] == 0x21)
+                            {
+                                if (iAccDataIndex >= 20)
+                                {
+                                    //TraceLog(L"iAccDataIndex >= 20 Skip \r\n");
+                                    break;
+                                }
+
+                                Array.Copy(bFifoData, i + 4, BHI160bAccData, iAccDataIndex * 6, 6 * sizeof(byte));
+                                iAccDataIndex++;
+                                i = i + 4 + 6;
+                            }
+                        }
+
+                        //Acc Samples as 20
+                        I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_SAMPLES, 20);
+
+                        Int16 x_raw = 0;
+                        Int16 y_raw = 0;
+                        Int16 z_raw = 0;
+                        float x_data = 0;
+                        float y_data = 0;
+                        float z_data = 0;
+
+                        // Write Acc BHI160 Data to AS7000
+                        for (i = 0; i < 20; i++)
+                        {
+                            x_raw = (Int16)(((UInt16)BHI160bAccData[0 + (i * 6)]) | ((UInt16)(BHI160bAccData[1 + (i * 6)] << 8)));
+                            y_raw = (Int16)(((UInt16)BHI160bAccData[2 + (i * 6)]) | ((UInt16)(BHI160bAccData[3 + (i * 6)] << 8)));
+                            z_raw = (Int16)(((UInt16)BHI160bAccData[4 + (i * 6)]) | ((UInt16)(BHI160bAccData[5 + (i * 6)] << 8)));
+                            x_data = (float)x_raw / 32768.0f * 4.0f;
+                            y_data = (float)y_raw / 32768.0f * 4.0f;
+                            z_data = (float)z_raw / 32768.0f * 4.0f;
+                            Debug.WriteLine("X:" + x_data + "Y:" + y_data + "Z:" + z_data);
+
+                            //TraceLog(L"X[%d] = M 0x%02x L 0x%02x Lmk 0x%02x \r\n", i, bAccData[1 + (i * 6)], bAccData[0 + (i * 6)], (bAccData[0 + (i * 6)] & 0xF0));
+                            //TraceLog(L"Y[%d] = M 0x%02x L 0x%02x Lmk 0x%02x \r\n", i, bAccData[3 + (i * 6)], bAccData[2 + (i * 6)], (bAccData[2 + (i * 6)] & 0xF0));
+                            //TraceLog(L"Z[%d] = M 0x%02x L 0x%02x Lmk 0x%02x \r\n", i, bAccData[5 + (i * 6)], bAccData[4 + (i * 6)], (bAccData[4 + (i * 6)] & 0xF0));
+
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_INDEX, (byte)(i + 1));
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_X_MSB, BHI160bAccData[1 + (i * 6)]);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_X_LSB, (byte)(BHI160bAccData[0 + (i * 6)] & 0xF0));
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Y_MSB, BHI160bAccData[3 + (i * 6)]);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Y_LSB, (byte)(BHI160bAccData[2 + (i * 6)] & 0xF0));
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Z_MSB, BHI160bAccData[5 + (i * 6)]);
+                            I2C_WriteRegData(HrmSensor, AS7000_REG_ACC_DATA_Z_LSB, (byte)(BHI160bAccData[4 + (i * 6)] & 0xF0));
+                        }
+
                     }
 
-                    Debug.Write("3");
 
-                    hrmStatus = I2C_ReadRegData(HrmSensor, AS7000_REG_HRM_STATUS);
+                    hrmStatus = I2C_ReadRegData_2(HrmSensor, AS7000_REG_HRM_STATUS);
                     Task.Delay(1);
-                    hrmHeartRate = I2C_ReadRegData(HrmSensor, AS7000_REG_HRM_HEARTRATE);
+                    hrmHeartRate = I2C_ReadRegData_2(HrmSensor, AS7000_REG_HRM_HEARTRATE);
                     Task.Delay(1);
-                    hrmSqi = I2C_ReadRegData(HrmSensor, AS7000_REG_HRM_SQI);
+                    hrmSqi = I2C_ReadRegData_2(HrmSensor, AS7000_REG_HRM_SQI);
                     Task.Delay(1);
-                    hrmSync = I2C_ReadRegData(HrmSensor, AS7000_REG_HRM_SYNC);
+                    hrmSync = I2C_ReadRegData_2(HrmSensor, AS7000_REG_HRM_SYNC);
                     Task.Delay(1);
                     Debug.Write("\nHRM: Status=" + hrmStatus.ToString() + " Rate=" + hrmHeartRate.ToString() + " Sqi=" + hrmSqi.ToString() + " sync=" + hrmSync.ToString());
                     blockI2C = false;
@@ -365,32 +574,45 @@ namespace IOTCoreMasterApp.LocalApps
 
         int AS7000_Get_Protocol_Version()
         {
-            byte pbMajor = I2C_ReadRegData(HrmSensor, AS7000_REG_PROTOCOL_VERSION_MAJOR);
-            byte pbMinor = I2C_ReadRegData(HrmSensor, AS7000_REG_PROTOCOL_VERSION_MINOR);
+            byte pbMajor = I2C_ReadRegData_2(HrmSensor, AS7000_REG_PROTOCOL_VERSION_MAJOR);
+            byte pbMinor = I2C_ReadRegData_2(HrmSensor, AS7000_REG_PROTOCOL_VERSION_MINOR);
             protocolVersion = (int)pbMajor * 256 + (int)pbMinor;
             return 0;
         }
 
         int AS7000_Get_SW_Version()
         {
-            byte pbMajor = I2C_ReadRegData(HrmSensor, AS7000_REG_SW_VERSION_MAJOR);
-            byte pbMinor = I2C_ReadRegData(HrmSensor, AS7000_REG_SW_VERSION_MINOR);
+            byte pbMajor = I2C_ReadRegData_2(HrmSensor, AS7000_REG_SW_VERSION_MAJOR);
+            byte pbMinor = I2C_ReadRegData_2(HrmSensor, AS7000_REG_SW_VERSION_MINOR);
             Debug.WriteLine("pbMajor:" + pbMajor);
             Debug.WriteLine("pbMinor:" + pbMinor);
             softwareVersion = (int)pbMajor * 256 + (int)pbMinor;
-            textBox_SW_Ver_Value.Text = pbMajor.ToString() + "." + pbMinor.ToString();
+
+            if (Acc_resource == 0)
+            {
+                textBox_SW_Ver_Value.Text = pbMajor.ToString() + "." + pbMinor.ToString();
+            }
+            else if (Acc_resource == 1)
+            {
+                textBox_SW_Ver_Value.Text = pbMajor.ToString() + "." + pbMinor.ToString() + ".BMC156";
+            }
+            else if (Acc_resource == 2)
+            {
+                textBox_SW_Ver_Value.Text = pbMajor.ToString() + "." + pbMinor.ToString() + ".BHI160";
+            }
+
             return 0;
         }
 
         int AS7000_Get_HW_Version()
         {
-            hwRevision = I2C_ReadRegData(HrmSensor, AS7000_REG_HW_VERSION);
+            hwRevision = I2C_ReadRegData_2(HrmSensor, AS7000_REG_HW_VERSION);
             return 0;
         }
 
         int AS7000_Get_App_ID()
         {
-            applicationId = I2C_ReadRegData(HrmSensor, AS7000_REG_APPLICATION_ID);
+            applicationId = I2C_ReadRegData_2(HrmSensor, AS7000_REG_APPLICATION_ID);
             return 0;
         }
 
@@ -411,7 +633,42 @@ namespace IOTCoreMasterApp.LocalApps
             AS7000_Get_SW_Version();
             AS7000_Get_HW_Version();
             AS7000_Get_App_ID();
+
+            if (Acc_resource == 1)
+            {
+                await BMC156_I2C_Init();
+                await Task.Delay(300);
+                BMC156_Init();
+            }
+            else if (Acc_resource == 2)
+            {
+                await BHI160_I2C_Init();
+                await Task.Delay(300);
+                BHI160_Init();
+            }
+
             return;
+        }
+
+        private void BMC156_Init()
+        {
+            // Set ACC BMC156 as +-16G with bandwith 15.63Hz
+            I2C_WriteRegData(BMCSensor, BMC156_REG_RANGE_SEL, BMC156_RANGE_SEL_16G);
+            I2C_WriteRegData(BMCSensor, BMC156_REG_BW_SEL, BMC156_BW_SEL_15_63Hz);
+            // Set ACC BMC156 as FIFO mode with xyz data
+            I2C_WriteRegData(BMCSensor, BMC156_REG_FIFO_CONFIG_1, (BMC156_FIFO_CONFIG_1_MODE_FIFO | BMC156_FIFO_CONFIG_1_DATA_SELECT_XYZ));
+        }
+
+        unsafe private void BHI160_Init()
+        {
+            byte bAck;
+            byte[] bConfigDataBuf = { 0x14, 0x00, 0xe8, 0x03, 0x00, 0x00, 0x00, 0x00 };  // bit[0:1] sample rate , bit[2:3] max report latency
+
+            Debug.WriteLine("bConfigDataBuf:" + BitConverter.ToString(bConfigDataBuf));
+            I2C_WriteRegMultiData(BHISensor, BHI160_REG_PARAMETER_WRITE_BUFFER, bConfigDataBuf, 8);
+            I2C_WriteRegData(BHISensor, BHY160_REG_PARAMETER_PAGE_SELECT, BHI160_PARAMETER_PAGE_SELECT_SENSORS);
+            I2C_WriteRegData(BHISensor, BHI160_REG_PARAMETER_REQUEST, BHI160_PARAMETER_REQUEST_WRITE_ACCELEROMETER);
+            I2C_ReadRegData(BHISensor, BHI160_REG_PARAMETER_ACKNOWLEDGE, &bAck);
         }
 
 
@@ -440,22 +697,66 @@ namespace IOTCoreMasterApp.LocalApps
         }
 
 
-        //byte[] I2C_ReadRegData(I2cDevice device, byte bRegister)
-        //{
-        //    I2cTransferResult result;
-        //    byte[] wBuf = new byte[1];
-        //    wBuf[0] = bRegister;
-        //    byte[] rBuf = new byte[1];
-        //    result = device.WriteReadPartial(wBuf, rBuf);
+        unsafe private void I2C_ReadRegData(I2cDevice device, byte bRegister, byte* bData)
+        {
+            I2cTransferResult result;
+            byte[] wBuf = new byte[1];
+            wBuf[0] = bRegister;
+            byte[] rBuf = new byte[1];
+            result = device.WriteReadPartial(wBuf, rBuf);
 
-        //    if (result.Status != I2cTransferStatus.FullTransfer)
-        //    {
-        //        return null; 
-        //    }
+            if (result.Status != I2cTransferStatus.FullTransfer)
+            {
+                *bData = 0;
+            }
 
-        //    return rBuf;
-        //}
-        byte I2C_ReadRegData(I2cDevice device, byte reg)
+            *bData = rBuf[0];
+        }
+
+        unsafe private void I2C_ReadRegMultiData(I2cDevice device, byte bRegister, byte[] bBuf, int iLen)
+        {
+            I2cTransferResult result;
+            byte[] wBuf = new byte[1];
+            wBuf[0] = bRegister;
+            byte[] rBuf = new byte[iLen];
+            result = device.WriteReadPartial(wBuf, rBuf);
+
+
+            if (result.Status != I2cTransferStatus.FullTransfer)
+            {
+                bBuf = null;
+            }
+
+            Array.Copy(rBuf, 0, bBuf, 0, iLen * sizeof(byte));
+
+            string ok = BitConverter.ToString(rBuf);
+            //Debug.WriteLine("ok:"+ok);
+
+        }
+
+        unsafe private void I2C_ReadRegMultiData_3(I2cDevice device, byte bRegister, byte[] bBuf, int iLen, int i)
+        {
+            I2cTransferResult result;
+            byte[] wBuf = new byte[1];
+            wBuf[0] = bRegister;
+            byte[] rBuf = new byte[iLen];
+            result = device.WriteReadPartial(wBuf, rBuf);
+
+
+            if (result.Status != I2cTransferStatus.FullTransfer)
+            {
+                bBuf = null;
+            }
+
+            Array.Copy(rBuf, 0, bBuf, 0 + (i * 50), iLen * sizeof(byte));
+
+            string ok = BitConverter.ToString(rBuf);
+            Debug.WriteLine("ok:" + ok);
+
+        }
+
+
+        byte I2C_ReadRegData_2(I2cDevice device, byte reg)
         {
             try
             {
@@ -484,6 +785,26 @@ namespace IOTCoreMasterApp.LocalApps
             }
         }
 
+        unsafe private void I2C_WriteRegMultiData(I2cDevice device, byte bRegister, byte[] bBuf, int iLen)
+        {
+            I2cTransferResult result;
+            int iwBufLen = iLen + 1;
+            byte[] wBuf = new byte[iwBufLen];
+            wBuf[0] = bRegister;
+
+            Array.Copy(bBuf, 0, wBuf, 1, iLen * sizeof(byte));
+
+            Debug.WriteLine("writemulti:" + BitConverter.ToString(wBuf));
+
+            result = device.WritePartial(wBuf);
+
+            if (result.Status != I2cTransferStatus.FullTransfer)
+            {
+                return;
+            }
+
+        }
+
         private void toggleSwitch_HRM_Toggled(object sender, RoutedEventArgs e)
         {
             bool flgOn;
@@ -507,8 +828,22 @@ namespace IOTCoreMasterApp.LocalApps
 
         }
 
+        unsafe private void BHI160_DeInit()
+        {
+            byte bAck;
+            byte[] bConfigDataBuf = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+            I2C_WriteRegMultiData(BHISensor, BHI160_REG_PARAMETER_WRITE_BUFFER, bConfigDataBuf, 8);
+            I2C_WriteRegData(BHISensor, BHY160_REG_PARAMETER_PAGE_SELECT, BHI160_PARAMETER_PAGE_SELECT_SENSORS);
+            I2C_WriteRegData(BHISensor, BHI160_REG_PARAMETER_REQUEST, BHI160_PARAMETER_REQUEST_WRITE_ACCELEROMETER);
+            I2C_ReadRegData(BHISensor, BHI160_REG_PARAMETER_ACKNOWLEDGE, &bAck);
+
+            BHISensor.Dispose();
+        }
+
         private async void appBarButton_Click(object sender, RoutedEventArgs e)
         {
+
             //stop monitor
             RateMonitorOff();
             textBox_HRM_Value.Text = "";
@@ -516,12 +851,28 @@ namespace IOTCoreMasterApp.LocalApps
             ProgBar_SQI.Background = new SolidColorBrush(ColorHelper.FromArgb(30, 255, 255, 255));
             ProgBar_SQI.Value = 0;
 
+
+            //Free the BMC156 Resources
+            if (Acc_resource == 1)
+            {
+                BMCSensor.Dispose();
+            }
+            //Free the BHI160 Resources
+            else if (Acc_resource == 2)
+            {
+                BHI160_DeInit();
+            }
+
+
+            //this.Frame.Navigate(typeof(MainPage));
+
+
             await Task.Delay(1500);
 
-            
+
             if (this.Frame.CanGoBack)
             {
-                //Free the Resources
+                //Free the AS7000 Resources
                 PwrPin.Dispose();
                 IntPin.Dispose();
                 LedEnPin.Dispose();
@@ -530,8 +881,8 @@ namespace IOTCoreMasterApp.LocalApps
 
                 this.Frame.GoBack();
             }
-            
 
         }
+
     }
 }
