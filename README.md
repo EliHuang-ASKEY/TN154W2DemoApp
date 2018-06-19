@@ -1,5 +1,5 @@
 # TN154W2DemoApp
-TN154W2 defaule APP source code For Visual Studio 2015
+TN154W2 defaule APP source code For Visual Studio 2017-- update by 2018/06/19
 
 # Feature List
 ### Clock:
