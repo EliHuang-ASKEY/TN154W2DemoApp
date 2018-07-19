@@ -87,7 +87,11 @@ namespace IOTCoreMasterApp.LocalApps
                    {
                        var firstAdapter = allAdapters[0];
                        await firstAdapter.ScanAsync();
-                       var network = firstAdapter.NetworkReport.AvailableNetworks.SingleOrDefault(n => n.Ssid == ssid);
+                    //0525       var network = firstAdapter.NetworkReport.AvailableNetworks.SingleOrDefault(n => n.Ssid == ssid);//0525
+                       try
+                       {
+                        var network = firstAdapter.NetworkReport.AvailableNetworks.FirstOrDefault(n => n.Ssid == ssid);                          
+
                        if (network != null)
                        {
                            WiFiConnectionResult wifiConnectionResult;
@@ -161,6 +165,12 @@ namespace IOTCoreMasterApp.LocalApps
                     {
                         return WifiConnectResult.SsidNotFound;
                     }
+                        //try 0706
+                        }
+                        catch (Exception ex)
+                        {
+                            return WifiConnectResult.SsidNotFound;
+                         }
                 }
                 else
                 {
@@ -211,10 +221,35 @@ namespace IOTCoreMasterApp.LocalApps
                 m_Popup.IsOpen = false;
                 if (result == WifiConnectResult.Success)
                 {
-                    WriteMessageText("\nConnect to " + WifiAPName + " Success\nWait to get IP...");
+                    /*WriteMessageText("\nConnect to " + WifiAPName + " Success\nWait to get IP...");
                     WriteMessageText("\nIP =" + ipget);
                     if ( String.Compare(ipget,0,"169.254",0,7)==0)//169.254.x.x
-                       await Task.Delay(5000);
+                       await Task.Delay(5000);*/
+                    WriteMessageText("\nSuccess..Wait to get IP");
+                    
+                    if (String.Compare(ipget, 0, "169.254", 0,7) == 0)//169.254.x.x
+                    {
+                        bool ifgetIP = false;
+                        int count = 0;
+                        do
+                        {
+                            count++;
+                            await Task.Delay(2000);
+                            // ipget = localHostName.ToString();
+                            ipget = GetCurrentIpv4Address();
+                            ifgetIP = Convert.ToBoolean(String.Compare(ipget, 0, "169.254", 0, 7));// == 0;//String.Compare(ipget, 0, "169.254", 0, 7)=1 if get ip
+                        } while (ifgetIP == false && count < 5);
+                        if (ifgetIP)
+                            WriteMessageText("\nIP =" + ipget);
+                        else
+                            WriteMessageText("\nExit to connect again");
+                     
+                        // m_DispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10000);
+                        // await Task.Delay(5000);
+                    }
+                       
+                    else
+                        WriteMessageText("\nIP =" + ipget);
 
                     //flagExit = "true";
                 }
@@ -262,7 +297,32 @@ namespace IOTCoreMasterApp.LocalApps
             
             return "-------";
         }
+        public static string GetCurrentIpv4Address()
+        {
+            var icp = NetworkInformation.GetInternetConnectionProfile();
+            if (icp != null
+                  && icp.NetworkAdapter != null
+                  && icp.NetworkAdapter.NetworkAdapterId != null)
+            {
+                var name = icp.ProfileName;
+
+                var hostnames = NetworkInformation.GetHostNames();
     
+                foreach (var hn in hostnames)
+                {
+                    if (hn.IPInformation != null
+                        && hn.IPInformation.NetworkAdapter != null
+                        && hn.IPInformation.NetworkAdapter.NetworkAdapterId != null
+                        && hn.IPInformation.NetworkAdapter.NetworkAdapterId == icp.NetworkAdapter.NetworkAdapterId
+                        && hn.Type == HostNameType.Ipv4)
+                    {
+                       // flagExit = "ok";
+                        return hn.CanonicalName;
+                    }
+                }
+            }
+            return "-------";
+        }
         // Write a message to MessageBlock on the UI thread.
 
         private Windows.UI.Core.CoreDispatcher messageDispatcher = Window.Current.CoreWindow.Dispatcher;
