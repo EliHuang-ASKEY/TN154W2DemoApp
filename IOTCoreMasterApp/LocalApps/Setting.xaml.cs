@@ -509,7 +509,7 @@ namespace IOTCoreMasterApp.LocalApps
 
                     bo = BrightnessOverride.GetDefaultForSystem();
                     bo.StartOverride();
-                    double value = 1.0;//1.0=>Brightness=100,0.8=>>Brightness=80
+                    double value = 0.32;//1.0=>Brightness=100,0.8=>>Brightness=80
                     bo.SetBrightnessLevel(value, DisplayBrightnessOverrideOptions.None);
                     await Task.Delay(1000);
                     bo.StopOverride();

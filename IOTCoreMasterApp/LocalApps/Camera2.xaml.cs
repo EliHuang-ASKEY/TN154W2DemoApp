@@ -1061,7 +1061,9 @@ namespace IOTCoreMasterApp.LocalApps
 
                 var value = zoomControl.Value;
                 ZoomSlider.Minimum = zoomControl.Min;
-                ZoomSlider.Maximum = zoomControl.Max;
+                //ZoomSlider.Maximum = zoomControl.Max;
+                //Eric modify for fix camera zoom in >2 preview will stuck in RS4
+                ZoomSlider.Maximum = 2; // maximum current = 2.028
                 ZoomSlider.StepFrequency = zoomControl.Step;
                 ZoomSlider.Value = value;
 
