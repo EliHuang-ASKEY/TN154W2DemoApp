@@ -27,6 +27,6 @@
                 HorizontalAlignment="Right"   
                 Icon="Forward" Label=""   
                 VerticalAlignment="Top"   
-                Width="50" Height="44"  Click="appBarButton_Click" />
+                Width="50" Height="44"  Click="appBarButton_Click" IsEnabled="False" />
     </Grid>
 </Page>

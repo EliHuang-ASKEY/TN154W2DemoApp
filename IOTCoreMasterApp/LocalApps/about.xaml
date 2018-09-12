@@ -70,7 +70,7 @@
                     <TextBlock x:Name="m_ManufacturerModelName" Text="" FontSize="24" Foreground="Snow" Width="220" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" FontWeight="Bold" TextWrapping="Wrap" Height="auto"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
-                <Image Source="ms-appx:///Assets/e-label_20180330.bmp" Width="295" VerticalAlignment="Center"/>
+                <Image x:Name="imgShow" Source="ms-appx:///Assets/e-label_20180730_2.bmp" Width="295" VerticalAlignment="Center"/>
                 </StackPanel>
 
             <!--

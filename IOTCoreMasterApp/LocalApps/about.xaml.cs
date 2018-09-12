@@ -20,7 +20,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
+//linda
+using Windows.Storage;
+using Windows.UI.Xaml.Media.Imaging;
 // 空白頁項目範本已記錄在 http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace IOTCoreMasterApp.LocalApps
@@ -78,12 +80,33 @@ namespace IOTCoreMasterApp.LocalApps
             s = "c:\\DPP\\OEM\\factory.ini General ro.serialno -G";
             await this.RunProcess("factory_ini_set_v2.exe", s, 8);
 
-
-
-
+            //linda
+            ReadImg();
+            
 
         }
+        public async void ReadImg()
+        {
+            //StorageFile sourceFile = await KnownFolders.PicturesLibrary.GetFileAsync("test.jpg");
+            StorageFolder storageFolder = await StorageFolder.GetFolderFromPathAsync("c:\\DPP\\OEM\\");// Windows.Storage.StorageFolder storageFolder            
+            try
+            {
+                StorageFile tryFile = await storageFolder.GetFileAsync("e-label.bmp");
+            }
+            catch
+            {
+               // WriteMessageText("\nFile does not exits! Check again");
+               
+                return;
+            }
+            StorageFile sourceFile = await storageFolder.GetFileAsync("e-label.bmp");
 
+            IRandomAccessStream photoStream = await sourceFile.OpenReadAsync();
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.SetSource(photoStream);
+            imgShow.Source = bitmap;
+
+        }
         private void appBarButton_Click(object sender, RoutedEventArgs e)
         {
             //this.Frame.Navigate(typeof(MainPage));

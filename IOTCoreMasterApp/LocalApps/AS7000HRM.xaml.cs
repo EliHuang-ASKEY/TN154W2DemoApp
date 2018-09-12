@@ -31,8 +31,8 @@ namespace IOTCoreMasterApp.LocalApps
     {
 
         // Chose Acc value resource
-        const int Acc_resource = 2;   //0 = Dummy , 1 = BMC156 , 2 = BHI160
-
+//linda
+        const int Acc_resource = 1;   //0 = Dummy , 1 = BMC156 , 2 = BHI160 
 
         // For PCA6800 EV
         const int AS7000_GPIO_POWER_PIN = 8;
@@ -154,6 +154,8 @@ namespace IOTCoreMasterApp.LocalApps
         {
             this.InitializeComponent();
             RateSensorInit();
+//linda 2018.0803
+            appBarButton.IsEnabled = true;
         }
 
         int AS7000_PWR_ON()
@@ -620,7 +622,21 @@ namespace IOTCoreMasterApp.LocalApps
 
         public async void RateSensorInit()
         {
+            
             Debug.WriteLine("RateSensorInit start");
+//linda 2018.0803
+if (Acc_resource == 1)
+            {
+                await BMC156_I2C_Init();
+                await Task.Delay(300);
+                BMC156_Init();
+            }
+            else if (Acc_resource == 2)
+            {
+                await BHI160_I2C_Init();
+                await Task.Delay(300);
+                BHI160_Init();
+            }
             AS7000_GPIO_Init();
             AS7000_PWR_ON();
 
@@ -634,18 +650,7 @@ namespace IOTCoreMasterApp.LocalApps
             AS7000_Get_HW_Version();
             AS7000_Get_App_ID();
 
-            if (Acc_resource == 1)
-            {
-                await BMC156_I2C_Init();
-                await Task.Delay(300);
-                BMC156_Init();
-            }
-            else if (Acc_resource == 2)
-            {
-                await BHI160_I2C_Init();
-                await Task.Delay(300);
-                BHI160_Init();
-            }
+            
 
             return;
         }
@@ -843,7 +848,9 @@ namespace IOTCoreMasterApp.LocalApps
 
         private async void appBarButton_Click(object sender, RoutedEventArgs e)
         {
-
+            toggleSwitch_HRM.IsOn = false;
+            toggleSwitch_HRM.IsEnabled = false;
+            appBarButton.IsEnabled = false;
             //stop monitor
             RateMonitorOff();
             textBox_HRM_Value.Text = "";
@@ -873,11 +880,15 @@ namespace IOTCoreMasterApp.LocalApps
             if (this.Frame.CanGoBack)
             {
                 //Free the AS7000 Resources
+//null linda2018.0803
                 PwrPin.Dispose();
+                PwrPin = null;
                 IntPin.Dispose();
+                IntPin = null;
                 LedEnPin.Dispose();
+                LedEnPin = null;
                 HrmSensor.Dispose();
-
+                HrmSensor = null;
 
                 this.Frame.GoBack();
             }

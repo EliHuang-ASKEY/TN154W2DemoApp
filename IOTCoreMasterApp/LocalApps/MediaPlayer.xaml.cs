@@ -105,6 +105,8 @@ namespace IOTCoreMasterApp.LocalApps
             if (currentFolder == null)
             {
                 lstFiles.Items.Clear();
+                //linda
+                lstFiles.Items.Add(">Internal Storage");
                 lstFiles.Items.Add(">Documents");
                 lstFiles.Items.Add(">Music");
                 lstFiles.Items.Add(">Videos");
@@ -138,6 +140,9 @@ namespace IOTCoreMasterApp.LocalApps
             {
                 switch (filename)
                 {
+                    case ">Internal Storage":
+                        currentFolder = await StorageFolder.GetFolderFromPathAsync("c:\\Data\\users\\public\\"); // ApplicationData.Current.LocalFolder;// "c:\\Data\\users\\public\\";
+                        break;
                     case ">Documents":
                         currentFolder = KnownFolders.DocumentsLibrary;
                         break;

@@ -235,7 +235,19 @@ namespace IOTCoreMasterApp.DataModel
             litem.Name = "WiFi&BT";
             appList.Add(litem);
 
-            
+            //move linda 2018.0725
+            //linda 0511 add
+            litem = new AppListItem();
+            litem.PackageFullName = "local:WifiConnectFromFile";
+            //StorageFile file;
+            clocklogo = new Uri("ms-appx:///Assets/wifi.png");
+            litem.ImageSrc = new BitmapImage();
+            litem.ImageSrc.UriSource = clocklogo;
+            //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
+            //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
+            litem.Name = "WifiConnectFromFile";
+            appList.Add(litem);
+            //
             litem = new AppListItem();
             litem.PackageFullName = "local:Flashlight";
             //StorageFile file;
@@ -347,18 +359,7 @@ namespace IOTCoreMasterApp.DataModel
             litem.Name = "NFC";
             appList.Add(litem);
 
-            //linda 0511 add
-            litem = new AppListItem();
-            litem.PackageFullName = "local:WifiConnectFromFile";
-            //StorageFile file;
-            clocklogo = new Uri("ms-appx:///Assets/wifi.png");
-            litem.ImageSrc = new BitmapImage();
-            litem.ImageSrc.UriSource = clocklogo;
-            //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
-            //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
-            litem.Name = "WifiConnectFromFile";
-            appList.Add(litem);
-            //
+           
 
             litem = new AppListItem();
             litem.PackageFullName = "local:Location2";
@@ -406,23 +407,7 @@ namespace IOTCoreMasterApp.DataModel
             //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
             litem.Name = "Message";
             appList.Add(litem);
-
-            if (_AS7000)
-            {
-                litem = new AppListItem();
-                litem.PackageFullName = "local:AS7000HRM";
-                //StorageFile file;
-                clocklogo = new Uri("ms-appx:///Assets/AS7000HRM.png");
-                litem.ImageSrc = new BitmapImage();
-                litem.ImageSrc.UriSource = clocklogo;
-                //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
-                //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
-                litem.Name = "HRM";
-                appList.Add(litem);
-            }
-
-
-            
+        
 
 
 
@@ -471,7 +456,20 @@ namespace IOTCoreMasterApp.DataModel
                 }
             }
 
-           
+
+            if (_AS7000)
+            {
+                litem = new AppListItem();
+                litem.PackageFullName = "local:AS7000HRM";
+                //StorageFile file;
+                clocklogo = new Uri("ms-appx:///Assets/AS7000HRM.png");
+                litem.ImageSrc = new BitmapImage();
+                litem.ImageSrc.UriSource = clocklogo;
+                //albumArtCache[song.AlbumArtUri.ToString()] = litem.ImageSrc;
+                //IRandomAccessStreamWithContentType Clocklogostream = await clocklogo.OpenReadAsync();
+                litem.Name = "HRM";
+                appList.Add(litem);
+            }
 
             litem = new AppListItem();
             litem.PackageFullName = "local:About";
@@ -599,12 +597,23 @@ namespace IOTCoreMasterApp.DataModel
                 Debug.WriteLine("There is no GPIO controller on this device.");
                 return;
             }
+//for bio-sersor linda 2018.0803
+ try
+            {
             _GpioPin = gpio.OpenPin(AS7000GpioPin);
             _GpioPin.Write(GpioPinValue.Low);
             _GpioPin.SetDriveMode(GpioPinDriveMode.Output);
             Debug.WriteLine("GPIO 8 Low");
             StopGpio();
             checkAS7000();
+}
+            catch (Exception ex)
+            {
+                _AS7000 = false;
+                Debug.WriteLine(ex.Message);
+                return;
+            }
+
         }
 
         private void StopGpio()
