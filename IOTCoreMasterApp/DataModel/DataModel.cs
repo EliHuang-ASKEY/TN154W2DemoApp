@@ -442,6 +442,7 @@ namespace IOTCoreMasterApp.DataModel
                             item.Name != "IOT Core Master Application" &
                             item.Name != "Search" &
                             item.Name != "Cortana Reminders" &
+                            item.Name != "Cortana" &
                             item.Name != "IoTShellExperienceHost" &
                             item.Name != "OnScreenKeyboard" &
                             item.Name != "Connect" &
@@ -687,7 +688,7 @@ namespace IOTCoreMasterApp.DataModel
             i2cPortExpander.Dispose();
         }
 
-
+#if false  // Ammore Modify - check Acc_resource
         public async void checkSensorHub()
         {
 
@@ -732,7 +733,23 @@ namespace IOTCoreMasterApp.DataModel
             
             i2cPortSensorHub.Dispose();
         }
+#else
+        public void checkSensorHub()
+        {
+            Windows.Devices.Sensors.Accelerometer _accelerometer = Windows.Devices.Sensors.Accelerometer.GetDefault();
 
+            if (_accelerometer != null)
+            {
+                Debug.WriteLine("DataModel: PCA6800 using Sensor BMC156");
+                _SensorHub = false;
+            }
+            else
+            {
+                Debug.WriteLine("DataModel: PCA6801 using Sensor Hub BHI160");
+                _SensorHub = true;
+            }
+        }
+#endif
 
         /*
         private int checkAS7000HRM()

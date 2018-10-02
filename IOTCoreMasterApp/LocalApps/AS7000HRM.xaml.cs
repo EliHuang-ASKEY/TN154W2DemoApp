@@ -32,7 +32,7 @@ namespace IOTCoreMasterApp.LocalApps
 
         // Chose Acc value resource
 //linda
-        const int Acc_resource = 1;   //0 = Dummy , 1 = BMC156 , 2 = BHI160 
+        int Acc_resource = 1;   //0 = Dummy , 1 = BMC156 , 2 = BHI160 
 
         // For PCA6800 EV
         const int AS7000_GPIO_POWER_PIN = 8;
@@ -624,8 +624,24 @@ namespace IOTCoreMasterApp.LocalApps
         {
             
             Debug.WriteLine("RateSensorInit start");
-//linda 2018.0803
-if (Acc_resource == 1)
+
+#if true  // Ammore Add - check Acc_resource
+            Windows.Devices.Sensors.Accelerometer _accelerometer = Windows.Devices.Sensors.Accelerometer.GetDefault();
+
+            if (_accelerometer != null)
+            {
+                Debug.WriteLine("AS7000HRM: PCA6800 using Sensor BMC156");
+                Acc_resource = 1;
+            }
+            else
+            {
+                Debug.WriteLine("AS7000HRM: PCA6801 using Sensor Hub BHI160");
+                Acc_resource = 2;
+            }
+#endif
+
+            //linda 2018.0803
+            if (Acc_resource == 1)
             {
                 await BMC156_I2C_Init();
                 await Task.Delay(300);

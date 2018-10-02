@@ -104,6 +104,12 @@ namespace IOTCoreMasterApp.LocalApps
         {
             try
             {
+#if true  // Ammore Add - for 4x Zoom issue
+                // Original setting is 1280x960
+                // in order to hidden the green line, setting as 1288x966
+                previewElement.Width = 1288;
+                previewElement.Height = 966;
+#endif
                 if (mediaCapture != null)
                 {
                     // Cleanup MediaCapture object
@@ -458,6 +464,10 @@ namespace IOTCoreMasterApp.LocalApps
 
                     isRecording = true;
                     status.Text = "Video recording in progress... press \'Stop Video Record\' to stop";
+#if true  // Ammore Add - for 4x Zoom issue
+                    previewElement.Width = 320;
+                    previewElement.Height = 320;
+#endif
                 }
                 else
                 {
@@ -473,7 +483,10 @@ namespace IOTCoreMasterApp.LocalApps
                     //playbackElement.SetSource(stream, recordStorageFile.FileType);
                     //playbackElement.Play();
                     status.Text = "Playing recorded video" + recordStorageFile.Path;
-
+#if true  // Ammore Add - for 4x Zoom issue
+                    previewElement.Width = 1288;
+                    previewElement.Height = 966;
+#endif
                 }
             }
             catch (Exception ex)
@@ -1061,9 +1074,13 @@ namespace IOTCoreMasterApp.LocalApps
 
                 var value = zoomControl.Value;
                 ZoomSlider.Minimum = zoomControl.Min;
+#if false  // Ammore modify - for 4x Zoom issue
                 //ZoomSlider.Maximum = zoomControl.Max;
                 //Eric modify for fix camera zoom in >2 preview will stuck in RS4
                 ZoomSlider.Maximum = 2; // maximum current = 2.028
+#else
+                ZoomSlider.Maximum = zoomControl.Max;
+#endif
                 ZoomSlider.StepFrequency = zoomControl.Step;
                 ZoomSlider.Value = value;
 
