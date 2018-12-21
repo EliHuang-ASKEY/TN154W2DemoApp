@@ -47,7 +47,12 @@ namespace IOTCoreMasterApp.LocalApps
             try
             {
                 var accessStatus = await Geolocator.RequestAccessAsync();
+#if false  // Ammore Modify - position update issue
+                // We will get position data every 30 sec if we set more than 2 second.
                 Geolocator geolocator = new Geolocator { ReportInterval = 2000 };
+#else
+                Geolocator geolocator = new Geolocator { ReportInterval = 1000 };
+#endif
                 Geoposition pos = await geolocator.GetGeopositionAsync();
 
                 geolocator.PositionChanged += OnPositionChanged;

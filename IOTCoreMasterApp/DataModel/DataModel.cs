@@ -73,7 +73,7 @@ namespace IOTCoreMasterApp.DataModel
             set { _batterySatus = value; OnPropertyChanged(); }
         }
 
-        private string _batteryPercent = "50%";
+        private string _batteryPercent = "";
         public string batteryPercent
         {
             get

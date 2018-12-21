@@ -64,25 +64,26 @@ namespace IOTCoreMasterApp.LocalApps
             //this.m_SystemFirmwareVersion.Text = clientDeviceInformation.SystemFirmwareVersion;
 
             string s = "PhoneBootLoaderVersion";
-            await RunProcess("GetRegValue.exe", s,1);
+            await RunProcess("c:\\windows\\system32\\GetRegValue.exe", s,1);
             s = "PhoneFirmwareRevision";
-            await RunProcess("GetRegValue.exe", s, 2);
+            await RunProcess("c:\\windows\\system32\\GetRegValue.exe", s, 2);
             s = "PhoneHardwareRevision";
-            await RunProcess("GetRegValue.exe", s, 3);
+            await RunProcess("c:\\windows\\system32\\GetRegValue.exe", s, 3);
             s = "PhoneManufacturer";
-            await RunProcess("GetRegValue.exe", s, 4);
+            await RunProcess("c:\\windows\\system32\\GetRegValue.exe", s, 4);
             s = "PhoneManufacturerModelName";
-            await RunProcess("GetRegValue.exe", s, 5);            
+            await RunProcess("c:\\windows\\system32\\GetRegValue.exe", s, 5);            
             //s = "OEMImageVersion";
            // await RunProcess("GetRegValue.exe", s,6);
             //s = "OEMBuildVersion";
             //await RunProcess("GetRegValue.exe", s, 7);
             s = "c:\\DPP\\OEM\\factory.ini General ro.serialno -G";
-            await this.RunProcess("factory_ini_set_v2.exe", s, 8);
-
+            this.RunProcess("c:\\windows\\system32\\factory_ini_set_v2.exe", s, 8);
+            s = "c:\\DPP\\OEM\\factory.ini General ro.ConfigPN -G";
+            this.RunProcess("c:\\windows\\system32\\factory_ini_set_v2.exe", s, 9);
             //linda
             ReadImg();
-            
+          
 
         }
         public async void ReadImg()
@@ -167,9 +168,12 @@ namespace IOTCoreMasterApp.LocalApps
                                     //this.m_OEMBuildVersion.Text = stringRead;
                                     break;
                                 case 8:
-                                    ParseParams(stringRead);
-
+                                    this.m_SN.Text = "SN:" + ParseParams(stringRead);
                                     break;
+                                case 9:
+                                    this.m_PN.Text = "PN:" + ParseParams(stringRead);
+                                    break;
+
                                 default:
                                     //StdOutputText.Text.Text += stringRead;
                                     break;
@@ -200,7 +204,7 @@ namespace IOTCoreMasterApp.LocalApps
 
 
 
-        private void ParseParams(string Params)
+        private string ParseParams(string Params)
         {
 
             var ParamsArry = Regex.Split(Params, " = ", RegexOptions.IgnoreCase);
@@ -209,8 +213,10 @@ namespace IOTCoreMasterApp.LocalApps
             //ParamsArry = Regex.Split(ParamsArry[0], "\n", RegexOptions.IgnoreCase);
             //ParamsArry = Regex.Split(ParamsArry[0], "\\n", RegexOptions.IgnoreCase);
 
-           // Debug.WriteLine("SN:" + ParamsArry[0] + "@@");
-            this.m_SN.Text = "SN:" + ParamsArry[0];
+            // Debug.WriteLine("SN:" + ParamsArry[0] + "@@");
+            //this.m_SN.Text = "SN:" + ParamsArry[0];
+            //Params = "SN:" + ParamsArry[0];
+            return ParamsArry[0];
             /*
             for (int i = 0; i < ParamsArry.Length; i++)
             {
@@ -224,7 +230,7 @@ namespace IOTCoreMasterApp.LocalApps
                 }
             }
             */
-            
+
         }
 
 

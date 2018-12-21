@@ -63,7 +63,12 @@ namespace IOTCoreMasterApp.LocalApps
                     //
                     // Value of 2000 milliseconds (2 seconds) 
                     // isn't a requirement, it is just an example.
+#if false  // Ammore Modify - position update issue
+                    // We will get position data every 30 sec if we set more than 2 second. 
                     _geolocator = new Geolocator { ReportInterval = 2000 };
+#else
+                    _geolocator = new Geolocator { ReportInterval = 1000 };
+#endif
                     _geolocator.DesiredAccuracy = PositionAccuracy.Default;
                     // Subscribe to PositionChanged event to get updated tracking positions
                     _geolocator.PositionChanged += OnPositionChanged;

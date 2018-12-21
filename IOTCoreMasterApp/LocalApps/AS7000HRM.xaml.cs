@@ -154,8 +154,6 @@ namespace IOTCoreMasterApp.LocalApps
         {
             this.InitializeComponent();
             RateSensorInit();
-//linda 2018.0803
-            appBarButton.IsEnabled = true;
         }
 
         int AS7000_PWR_ON()
@@ -666,7 +664,8 @@ namespace IOTCoreMasterApp.LocalApps
             AS7000_Get_HW_Version();
             AS7000_Get_App_ID();
 
-            
+            toggleSwitch_HRM.IsEnabled = true;
+            appBarButton.IsEnabled = true;
 
             return;
         }

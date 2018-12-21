@@ -20,7 +20,7 @@
         <TextBox x:Name="textBox_SQI_Value" HorizontalAlignment="Left" Height="36" Margin="147,518,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="158"/>
         <TextBox x:Name="textBox_SQI" HorizontalAlignment="Left" Height="25" Margin="148,99,0,0" TextWrapping="Wrap" Text="Signal Quality" VerticalAlignment="Top" Width="128" BorderBrush="{x:Null}"/>
         <TextBox x:Name="textBox_HRM" HorizontalAlignment="Left" Height="25" Margin="148,481,0,0" TextWrapping="Wrap" Text="Heart Rate" VerticalAlignment="Top" Width="128" BorderBrush="{x:Null}" Background="{x:Null}"/>
-        <ToggleSwitch x:Name="toggleSwitch_HRM" Header="HRM" HorizontalAlignment="Left" Height="68" Margin="16,104,0,0" VerticalAlignment="Top" Width="126" Toggled="toggleSwitch_HRM_Toggled" OffContent="Stop" OnContent="Start"/>
+        <ToggleSwitch x:Name="toggleSwitch_HRM" Header="HRM" HorizontalAlignment="Left" Height="68" Margin="16,104,0,0" VerticalAlignment="Top" Width="126" Toggled="toggleSwitch_HRM_Toggled" OffContent="Stop" OnContent="Start" IsEnabled="False"/>
         <ProgressBar x:Name="ProgBar_SQI" HorizontalAlignment="Left" Height="20" Margin="147,138,0,0" VerticalAlignment="Top" Width="158" Foreground="Lime" Maximum="5"/>
         <AppBarButton x:Name="appBarButton"
                           Grid.Row="0"
