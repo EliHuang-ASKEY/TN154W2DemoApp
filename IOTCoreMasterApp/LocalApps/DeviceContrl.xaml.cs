@@ -20,34 +20,24 @@ using Windows.UI.Core;
 using System.Diagnostics;
 using Windows.Graphics.Display;
 
-
-
-
-
-
-
 // 空白頁項目範本已記錄在 http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace IOTCoreMasterApp.LocalApps
 {
     
-
     /// <summary>
     /// 可以在本身使用或巡覽至框架內的空白頁面。
     /// </summary>
     public sealed partial class DeviceContrl : Page
     {
         
-
         private BrightnessOverride bo;
-        
-
+        const string SETTING_Backlight = "Backlight";
+        const string SETTING_Level = "Level";
 
         public DeviceContrl()
         {
             this.InitializeComponent();
-
-            
 
         }
 
@@ -55,6 +45,17 @@ namespace IOTCoreMasterApp.LocalApps
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             string sErrMessage = "";
+            var Settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            double value;
+
+            ApplicationDataContainer container;
+
+            if (!Settings.Containers.TryGetValue(SETTING_Backlight, out container))
+            {
+                container = Settings.CreateContainer(SETTING_Backlight, ApplicationDataCreateDisposition.Always);
+                container.Values[SETTING_Level] = 32;
+            }
+            value = Convert.ToDouble(container.Values[SETTING_Level]);
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Graphics.Display.BrightnessOverride"))
             {
@@ -63,14 +64,13 @@ namespace IOTCoreMasterApp.LocalApps
                 {
                     //Create BrightnessOverride object
                     bo = BrightnessOverride.GetDefaultForSystem();
-
-                    bo.StartOverride();
+                    //bo.StartOverride();
                     
-                    double value = bo.GetLevelForScenario(DisplayBrightnessScenario.DefaultBrightness) * 100;
+                    //double value = bo.GetLevelForScenario(DisplayBrightnessScenario.DefaultBrightness) * 100;
                     BrignessSlider.Value = value;
                     BrignessSlider.Header = string.Format("Brigness：{0}", BrignessSlider.Value);
                     BrignessSlider.IsEnabled = true;
-                    
+                    bo.StartOverride();
 
                 }
                 catch (Exception ex)
@@ -79,12 +79,13 @@ namespace IOTCoreMasterApp.LocalApps
                 }
             }
 
-            if (bo == null)
-            {
-                //sMsg.Text = "This Devices not support BrightnessOverride" + "\n" + "\n" + sErrMessage;
-            }
-
-
+            //if (bo == null)
+            //{
+            //    sMsg.Text = "This Devices not support BrightnessOverride" + "\n" + "\n" + sErrMessage;
+            //}
+            
+            Settings = null;
+            container = null;
             /*
             var localSettings = ApplicationData.Current.LocalSettings;
             var value = localSettings.Values["Brightness"];
@@ -106,13 +107,22 @@ namespace IOTCoreMasterApp.LocalApps
 
         protected async override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
-            bo.StopOverride();
+            //bo.StopOverride();
             await BrightnessOverride.SaveForSystemAsync(bo);
             
+            var Settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            //object BrignessSlider;
+            ApplicationDataContainer container;
+
+            if (!Settings.Containers.TryGetValue(SETTING_Backlight, out container))
+            {
+                container = Settings.CreateContainer(SETTING_Backlight, ApplicationDataCreateDisposition.Always);
+            }
+            container.Values[SETTING_Level] = BrignessSlider.Value;
             //saveBrightness();
-          
-
-
+            Settings = null;
+            container = null;
+            bo = null;
         }
 
         
@@ -120,28 +130,25 @@ namespace IOTCoreMasterApp.LocalApps
 
         private void slider_Brightness_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            Slider _slider = (Slider)sender;
+            //Slider _slider = (Slider)sender;
 
-            _slider.IsEnabled = false;
+            //_slider.IsEnabled = false;
 
             if (bo != null)
             {
-                double value = _slider.Value / 100;
+                double value = BrignessSlider.Value / 100;
 
                 //Set override brightness to full brightness even when battery is low
 
                 //bo.SetBrightnessScenario(DisplayBrightnessScenario.FullBrightness, DisplayBrightnessOverrideOptions.None);
                 bo.SetBrightnessLevel(value, DisplayBrightnessOverrideOptions.None);
-                
+                bo.StartOverride();
                 //Request to start the overriding process
 
             }
 
-            _slider.Header = string.Format("Brigness：{0}", BrignessSlider.Value);
-            _slider.IsEnabled = true;
-
-
-           
+            BrignessSlider.Header = string.Format("Brigness：{0}", BrignessSlider.Value);
+            //_slider.IsEnabled = true;
 
         }
 
